@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.489
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proyecto_ED1_v1", "Proyecto_ED1_v1\Proyecto_ED1_v1.csproj", "{CA6F53D7-2D9B-4638-AE84-CB98D1C50958}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Estructuras", "Estructuras\Estructuras.csproj", "{1C231B75-A3D7-495D-BEBD-1F7A3426EA6B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CA6F53D7-2D9B-4638-AE84-CB98D1C50958}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA6F53D7-2D9B-4638-AE84-CB98D1C50958}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA6F53D7-2D9B-4638-AE84-CB98D1C50958}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA6F53D7-2D9B-4638-AE84-CB98D1C50958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C231B75-A3D7-495D-BEBD-1F7A3426EA6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C231B75-A3D7-495D-BEBD-1F7A3426EA6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C231B75-A3D7-495D-BEBD-1F7A3426EA6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C231B75-A3D7-495D-BEBD-1F7A3426EA6B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4CC5BC13-1612-4348-8347-689CECBB133B}
+	EndGlobalSection
+EndGlobal
