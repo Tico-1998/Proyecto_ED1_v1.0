@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Estructuras
 {
-    class ArbolB_
+    class ArbolB_<TLlave, TValor>
     {
 
 
