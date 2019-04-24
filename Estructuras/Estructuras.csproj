@@ -42,10 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArbolB+.cs" />
     <Compile Include="ArbolB.cs" />
     <Compile Include="Class1.cs" />
-    <Compile Include="NodoArbolB+.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

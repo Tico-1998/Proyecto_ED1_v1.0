@@ -132,11 +132,106 @@ namespace Estructuras
         #endregion
 
         #region Quitar Argumento
-
-
-
+        
+        private ref struct QuitarArgumento
+        {
+            public readonly TLlave Llave;
+            public readonly NodoComparador Comparador;
+            /// <summary>
+            /// establece un valor encontrado en las hojas
+            /// </summary>
+            public TValor Valor { get; set; }
+            /// <summary>
+            /// verdadero sik se quito el item
+            /// </summary>
+            public bool Quitar { get; set; }
+            public QuitarArgumento(in TLlave llave, in NodoComparador comparador)
+            {
+                Llave = llave;
+                Comparador = comparador;
+                Valor = default;
+                Quitar = false;
+            }
+            public void QuitarValorAsignado(TValor valor)
+            {
+                Valor = valor;
+                Quitar = true;
+            }
+        }
         #endregion
 
+        #region Relacion de nodos
+
+        private readonly ref struct RelacionNodos
+        {
+            public readonly Nodo HermanoIzquiero;
+            public readonly Nodo HermanoDerecho;
+
+            public readonly NodoInterno AntesesorIzquiedo;
+            public readonly NodoInterno AntesesorDerecho;
+            public readonly int IndexAntesesorIzquierdo;
+            public readonly int IndexAntesesorDerecho;
+            public readonly bool TieneHijoIzquierdo;
+            public readonly bool TieneHijoDerecho;
+            //revisa error tipo de dato NodoOnterno
+            private NodosRelativos (NodoInterno antesesorIzquierdo, int indexAntesesorIzquierdo, Nodo hermanoIzquierdo, bool tieneHijpIzquierdo,
+                NodoInterno antesesorDerecho, int indexAntesesroDerecho, Nodo hermanoDerecho, bool tieneHijoDerecho)
+            {
+                AntesesorIzquiedo = antesesorIzquierdo;
+                IndexAntesesorIzquierdo = indexAntesesorIzquierdo;
+                HermanoIzquiero = hermanoIzquierdo;
+                TieneHijoIzquierdo = tieneHijpIzquierdo;
+                AntesesorDerecho = antesesorDerecho;
+                IndexAntesesorDerecho = indexAntesesroDerecho;
+                HermanoDerecho = hermanoDerecho;
+                TieneHijoDerecho = tieneHijoDerecho;
+            }
+            public static NodosRelativos Crear(Nodo hijo, int index, NodoInterno padre, in NodosRelativos padreRelativo )
+            {//buscar Debug
+                Debug.Asser(index >= -1 && index < padre.Length);
+                NodoInterno antesesorIzquierdo, antesesorDerecho;
+                int indexAntesesorIzquierdo, indexAntesesorDerecho;
+                Nodo hermanoIzquierdo, hermanoDerecho;
+                bool tieneHermanoIzquierdo, tieneHermanoDerecho;
+                if (index==-1)
+                {
+                    antesesorIzquierdo = padreRelativo.AntesesorIzquierdo;
+                    indexAntesesorIzquierdo = padreRelativo.IndexAntesesorIzquierdo;
+                    hermanoIzquierdo = ((NodoInterno)padreRelativo.HermanoIzquierdo)?.GetUltimoHijo();//revisar metodo
+                    tieneHermanoIzquierdo = false;
+                    antesesorDerecho = padre;
+                    indexAntesesorDerecho = index + 1;
+                    hermanoDerecho = padre.GetHijo(indexAntesesorDerecho);//revisar metodo
+                    tieneHermanoDerecho = false;
+                }
+                else if (index ==padre.Length-1)
+                {
+                    antesesorIzquierdo = padre;
+                    indexAntesesorIzquierdo = index;
+                    hermanoIzquierdo = padre.GetHijo(indexAntesesorIzquierdo - 1);//revisar metodo
+                    tieneHermanoIzquierdo = true;
+                    antesesorDerecho = padreRelativo.AntesesorDerecho;
+                    indexAntesesorDerecho = padreRelativo.IndexAntesesorDerecho;
+                    hermanoDerecho = ((NodoInterno)padreRelativo.HermanoDerecho)?.GetPrimerHijo();//Revisar metodo
+                    tieneHermanoDerecho = false;
+                }
+                else
+                {
+                    antesesorIzquierdo = padre;
+                    indexAntesesorIzquierdo = index;
+                    hermanoIzquierdo = padre.getHijo(indexAntesesorIzquierdo - 1);//revisar metodo
+                    tieneHermanoIzquierdo = true;
+                    antesesorDerecho = padre;
+                    indexAntesesorDerecho = index + 1;
+                    hermanoDerecho = padre.GetHijo(indexAntesesorDerecho);
+                    tieneHermanoDerecho = true;
+                }
+                return new NodosRelativos(antesesorIzquierdo, indexAntesesorIzquierdo, hermanoIzquierdo, tieneHermanoIzquierdo,
+                    antesesorDerecho, indexAntesesorDerecho, hermanoDerecho, tieneHermanoDerecho);
+            }
+        }
+
+        #endregion
 
     }
     class NodoArbolB_
