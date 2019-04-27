@@ -95,9 +95,9 @@ namespace Proyecto_ED1_v1.Controllers
         public void LeerSQL()
         {
             /*
-            Regex RegexSelect = new Regex(".*\"SELECT\".*" "\n" ^['a' - 'z', 'A' - 'Z']['a' - 'z', 'A' - 'Z', 0 - 9],RegexOptions.Singleline);//revisar los parentesis
+            Regex RegexSelect = new Regex($".*\"SELECT\".*" "\\n" ^['a' - 'z', 'A' - 'Z']['a' - 'z', 'A' - 'Z', 0 - 9],RegexOptions.Singleline);//revisar los parentesis
             
-            Regex RegexFrom = new Regex(".*(\"FROM\").*"\n ^['a' - 'z', 'A' - 'Z']['a' - 'z', 'A' - 'Z', 0 - 9]);
+            Regex RegexFrom = new Regex(".*(\"FROM\").*"\r\n ^['a' - 'z', 'A' - 'Z']['a' - 'z', 'A' - 'Z', 0 - 9]);
             Regex RegexDelete = new Regex(.*("DELETE").*"\n" ^['a' - 'z', 'A' - 'Z']['a' - 'z', 'A' - 'Z', 0 - 9]);
             Regex RegexWHERE = new Regex(.*("WHERE").*"\n" ^['a' - 'z', 'A' - 'Z']['a' - 'z', 'A' - 'Z', 0 - 9]);
             Regex RegexCreate = new Regex(.*("CREATE TABLE").*"\n" ^['a' - 'z', 'A' - 'Z']['a' - 'z', 'A' - 'Z', 0 - 9]);
@@ -106,6 +106,8 @@ namespace Proyecto_ED1_v1.Controllers
             Regex RegexValues = new Regex(.*("VALUES").*"\n" ^['a' - 'z', 'A' - 'Z']['a' - 'z', 'A' - 'Z', 0 - 9]);
             Regex RegexGo = new Regex(.*("GO").*"\n" ^'a' - 'z', 'A' - 'Z','a' - 'z', 'A' - 'Z', 0 - 9);//revisar si sirve
             */
+            //despues de leer SQL
+            //agregar valores en lista 
 
             //guardar en lista 
             List<string> SqlIngresado = new List<string>();
@@ -131,7 +133,28 @@ namespace Proyecto_ED1_v1.Controllers
             SqlIngresado.Add(SQLIngresadoLinea7);
             SqlIngresado.Add(SQLIngresadoLinea8);
             SqlIngresado.Add(SQLIngresadoLinea9);
-            
+
+            switch (SqlIngresado[0])
+            {
+                case "CREATE TABLE":
+                    RegexCreateTable();
+                    break;
+                case "DROP TABLE":
+                    RegexDropTable();
+                    break;
+                case "DELETE":
+                    RegexDelete();
+                    break;
+                case "SELECT":
+                    RegexSelect();
+                    break;
+                case "INSERT INTO":
+                    RegexInsert();
+                    break;                    
+                default:
+                    break;
+            }
+
 
             ///el metodo recibe los valores de RegexCreateTable y valida si son correctos 
             void ValidarVariables(string sqlIngresado, int contadorInt, int contadorVarchar, int contadorDatetime)//revisar si funciona la recursividad
@@ -150,6 +173,7 @@ namespace Proyecto_ED1_v1.Controllers
                         }
                         else
                         {
+                            string prueba = "◙,○, ";
                             contador++;
                             contadorVarchar++;
                             ValidarVariables(SqlIngresado[contador++], contadorInt, contadorVarchar, contadorDatetime);
@@ -205,6 +229,10 @@ namespace Proyecto_ED1_v1.Controllers
                 int contadorInt = 0;
                 int contadorVarChar = 0;
                 int contadorDateTime = 0;
+                //Falta validar varias variables
+                string PatronCompleto = ".*(CREATE TABLE).*[ ,\n]+^[a-zA-Z][a-zA-Z,0-9,_,-]+[ ,\n][(]{1}[ ,\n][ID]{2}\\s[a-zA-Z,(,),0,1, ]+[,]{1}[ ," +
+                    "\n][a-zA-Z][a-zA-Z,0-9,_,-]+\\s[a-zA-Z,(,),0,1, ]+[,]{1}[ ,\n][)]{1}";
+                
                 string Patron = ".*\"CREATE TABLE\".*";//revisar si acepta el patron
                 if (Regex.IsMatch(SQLIngesadoLINEA1, Patron))
                 {
@@ -244,8 +272,17 @@ namespace Proyecto_ED1_v1.Controllers
             
             void RegexDropTable()
             {
+                string intentoPatronCompleto = ".*(DROP TABLE).*[ \n]+^[a-zA-Z][a-zA-Z0-9_-]+";
                 string patro1 = ".*DROP TABLE.*";
-                if (Regex.IsMatch(SQLIngesadoLINEA1,patro1))
+                if (Regex.IsMatch(SQLIngesadoLINEA1,intentoPatronCompleto))
+                {
+                    //revisar si existen las variables y llamr al metodo
+                }
+                else
+                {
+                    //error en sintaxis o nombre de tabla
+                }
+                /*if (Regex.IsMatch(SQLIngesadoLINEA1,patro1))
                 {
                     string patron2 = "^['a'-'z','A'-'Z']['a'-'z','A'-'Z',0-9,-,_]";
                     if (Regex.IsMatch(SQLIngresadoLinea2,patron2))
@@ -256,13 +293,14 @@ namespace Proyecto_ED1_v1.Controllers
                     {
                         //error en sintaxis o nombre de tabla
                     }
-                }
+                }*/
             }
 
             void RegexDelete()
             {
                 string Del = "DELETE FROM";
                 string patron1 = ".*"+Del+".*";
+                string PatronCompleto = ".*(DELETE FROM).*[ ,\n]+^[a-z,A-Z][a-z,A-Z,0-9,-,_]+[ ,\n].*(WHERE).*[ ,\n]+[ID]{2}\\s[=]\\s[0-9]+";
                 if (Regex.IsMatch(SQLIngesadoLINEA1,patron1))
                 {
                     string patron2 = "^['a'-'z','A'-'Z']['a'-'z','A'-'Z',0-9,_,-]{4}";
@@ -296,6 +334,8 @@ namespace Proyecto_ED1_v1.Controllers
             void RegexSelect()
             {//se busca solo con 1 o con todos?
                 string patron1 = ".*SELECT.*";
+                string PatronCompleto = ".*(SELECT).*[ ,\n]+^[a-zA-Z][a-zA-Z,0-9,_,-]+[ ,\n].*(FROM).*[ ,\n]^[a-zA-Z]" +
+                    "[a-zA-Z,0-9,_,-][ ,\n].*(WHERE).*^[a-zA-Z][a-zA-Z,0-9,-,_]+\\s[=]\\s^[a-zA-Z][a-zA-Z,_,-]";
                 if (Regex.IsMatch(SQLIngesadoLINEA1,patron1))
                 {
                     string patron2 = "^[a-z,A-Z][a-z,A-Z,0-9,_,-]";
@@ -323,6 +363,23 @@ namespace Proyecto_ED1_v1.Controllers
                     {
                         //mensaje error al ingresar variable
                     }
+                }
+            }
+
+            void RegexInsert()
+            {
+                //pendiente leer todas las columnas y variables
+                //validar que se esta comparando 
+                string PatronCompleto = ".*(INSERT INTO).*[a-zA-Z][a-zA-Z,0-9,_,-]+[(]{1}[ID,]" +
+                    "{3}[ ,\n][a-z,A-Z][a-zA-Z,0-9,-,_]+  [)]{1}.*(VALUES).*[(]{1}[0-9]+[,]{1}[ ,\n]" +
+                    "[']{1}[a-zA-Z][a-zA-Z,0-9,-,_,/]+[']{1}[ ,/n]  [)]{1}";
+                if (Regex.IsMatch(SqlIngresado[0],PatronCompleto))
+                {
+                    //llamar metodo de insertar
+                }
+                else
+                {
+                    //mensaje error en sintaxis o en variables 
                 }
             }
         }

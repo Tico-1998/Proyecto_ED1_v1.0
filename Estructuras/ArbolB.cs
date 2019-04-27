@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Estructuras
 {
@@ -465,6 +466,12 @@ namespace Estructuras
             Eliminar(Clave, ref nuevaRaiz);
             return nuevaRaiz;
         }
+
+        #endregion
+        //hacer metodo
+        #region Escritura de archivo
+
+
 
         #endregion
     }
