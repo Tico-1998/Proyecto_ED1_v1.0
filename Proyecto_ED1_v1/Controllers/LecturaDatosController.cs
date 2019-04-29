@@ -281,6 +281,50 @@ namespace Proyecto_ED1_v1.Controllers
 
         #endregion
 
+        #region Select
+        public void SelectEnter()
+        {
+            string AuxiliarVariable;//esta variable ayuda a elimar las , de los string para guardarlos en la lista
+            List<string> Variable = new List<string>();
+            int contadorVariables = 1;
+            if (Lectura[1]!="*")
+            {
+                
+                while (Lectura[contadorVariables]!="FROM"||Lectura[contadorVariables]!="From"||Lectura[contadorVariables]!="from")
+                {
+                    AuxiliarVariable = Lectura[contadorVariables].TrimEnd(',');
+                    Variable.Add(AuxiliarVariable);
+                    contadorVariables++;
+                }
+                
+            }
+            else
+            {
+                Variable.Add("*");
+            }
+            contadorVariables++;
+            string nombreTabla = Lectura[contadorVariables];
+            string Posicion="";
+            string valor="";
+            if (Lectura[contadorVariables + 1] != null)
+            {
+                contadorVariables += 2;
+                if (Lectura[contadorVariables] != null)
+                {
+                    string[] Separado;
+                    Separado = Lectura[contadorVariables].Split(' ');
+                    Posicion = Separado[0];
+                    valor = Separado[2];
+                }
+            }
+            Tabla.Buscar(Variable, nombreTabla, Posicion, valor);
+        }
 
+        public void Select()
+        {
+            //hacer metodo para leer en una linea 
+        }
+
+        #endregion
     }
 }
