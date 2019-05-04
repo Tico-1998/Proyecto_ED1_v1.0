@@ -7,6 +7,7 @@ namespace Proyecto_ED1_v1.Models
 {
     public class Tabla
     {
+        public string TextoIngresado = "";
         public static Dictionary<string, List<Tabla>> DiccionarioTabla = new Dictionary<string, List<Tabla>>();
         public static Dictionary<string, string> Variables = new Dictionary<string, string>();//la llave es el nombre de la variable, el valor es cual variable es 
         public string id;
@@ -19,7 +20,11 @@ namespace Proyecto_ED1_v1.Models
         public string dateTime1;
         public string dateTime2;
         public string dateTime3;
-
+        public static void prueba(string prueba)
+        {
+            Console.WriteLine(prueba);
+            Console.ReadKey();
+        }
         public static void CrearTabla(Tabla tabla, string nombre)
         {            
             Variables.Add(tabla.int1,"int1");

@@ -1,5 +1,4 @@
-﻿
-@model Proyecto_ED1_v1.Controllers.LecturaDatosController
+﻿@model Proyecto_ED1_v1.Controllers.LecturaDatosController
 @{
     ViewData["Title"] = "SQLVista";
 }
@@ -9,16 +8,11 @@
 }
 
 <h2>SQLVista</h2>
-@using (Html.BeginForm(FormMethod.Get))
+@using (Html.BeginForm())
 {
     <div>
         @Html.TextAreaFor(Model => Model.textoIngresado, new { cols = 100, @rows = 10 })
-
-        valor1:@ViewBag.textoIngresado
     </div>
     <input type="submit" value="Ingresar" />
 }
-
-
-
 

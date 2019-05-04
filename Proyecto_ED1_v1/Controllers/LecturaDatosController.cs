@@ -6,22 +6,35 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using Proyecto_ED1_v1.Models;
 
+
 namespace Proyecto_ED1_v1.Controllers
 {
     public class LecturaDatosController : Controller
     {
-        Tabla tabla = new Tabla();
-        public IActionResult Index()
+        public string textoIngresado { get; set; }
+        public void probar()
         {
-
-            return View();
+            Tabla.prueba(textoIngresado);
         }
+        Tabla tabla = new Tabla();
+        public ActionResult Index()
+        {
+           
+            return View();            
+        }
+
+
         public static List<string> Lectura = new List<string>();
+        
+        
+        
+        
+        
         public void Leer()
         {
             //leer texto 
             //guardar texto en variable 
-            string textoIngresado = "";
+            
             //contar lineas
 
            
