@@ -5,13 +5,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Proyecto_ED1_v1.Models;
+using Proyecto_ED1_v1.Controllers;
 
 namespace Proyecto_ED1_v1.Controllers
 {
     public class HomeController : Controller
     {
+        public string texto { get; set; }
+        [HttpGet]
         public IActionResult Index()
         {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Index(string Texto)
+        {
+            LecturaDatosController.Leer(Texto);
             return View();
         }
 
