@@ -1,18 +1,13 @@
 ﻿
-@model Proyecto_ED1_v1.Controllers.LecturaDatosController
+@model Proyecto_ED1_v1.Controllers.HomeController
 @{
     ViewData["Title"] = "SQLVista";
 }
-@using (Html.BeginForm("Leer", "LecturaDatos", FormMethod.Post))
-{
-    <input type="submit" value="Enviar" />
-}
-
 <h2>SQLVista</h2>
-@using (Html.BeginForm(FormMethod.Get))
+@using (Html.BeginForm())
 {
     <div>
-        @Html.TextAreaFor(Model => Model.textoIngresado, new { cols = 100, @rows = 10 })
+        @Html.TextAreaFor(Model => Model.texto, new { cols = 100, @rows = 10 })
 
         valor1:@ViewBag.textoIngresado
     </div>

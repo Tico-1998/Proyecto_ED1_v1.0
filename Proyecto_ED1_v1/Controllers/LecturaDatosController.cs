@@ -11,26 +11,11 @@ namespace Proyecto_ED1_v1.Controllers
 {
     public class LecturaDatosController : Controller
     {
-        public string textoIngresado { get; set; }
-        public void probar()
-        {
-            Tabla.prueba(textoIngresado);
-        }
         Tabla tabla = new Tabla();
-        public ActionResult Index()
-        {
-           
-            return View();            
-        }
-
-
         public static List<string> Lectura = new List<string>();
-        
-        
-        
-        
-        
-        public void Leer()
+        public static string texto { get; set; }
+
+        public static void Leer(string textoIngresado)
         {
             //leer texto 
             //guardar texto en variable 
