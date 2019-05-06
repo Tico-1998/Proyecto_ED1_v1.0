@@ -1,0 +1,47 @@
+﻿@model Proyecto_ED1_v1.Models.Tabla
+@{
+    ViewData["Title"] = "MostrarResultados";
+}
+
+<h2>MostrarResultados</h2>
+
+<table>
+    <tbody>
+        <tr>
+            <th>                
+                @Html.DisplayNameFor(Model=>Model.id)
+            </th>
+            <th>
+                @Model.int1!=null?@Html.DisplayNameFor(Model=>Model.int1)                
+            </th>
+            <th>
+                @Model.int2!=null?@Html.DisplayNameFor(Model=>Model.int2)                
+            </th>
+            <th>
+                @Model.int3!=null?@Html.DisplayNameFor(Model=>Model.int3)
+            </th>
+            <th>
+                @Model.varchar1!=null?@Html.DisplayNameFor(Model=>Model.varchar1)
+            </th>
+            <th>
+                @Model.varchar2!=null?@Html.DisplayNameFor(Model=>Model.varchar2)
+            </th>
+            <th>
+                @Model.varchar3!=null?@Html.DisplayNameFor(Model=>Model.varchar3)
+            </th>
+            <th>
+                @Model.dateTime1!=null?@Html.DisplayNameFor(Model=>Model.dateTime1)
+            </th>
+            <th>
+                @Model.dateTime2!=null?@Html.DisplayNameFor(Model=>Model.dateTime2)
+            </th>
+            <th>
+                @Model.dateTime3!=null?@Html.DisplayNameFor(Model=>Model.dateTime3)
+            </th>
+        </tr>
+        @foreach (var item in Model)//ese item es lo que le mando??
+        {
+
+        }
+    </tbody>
+</table>

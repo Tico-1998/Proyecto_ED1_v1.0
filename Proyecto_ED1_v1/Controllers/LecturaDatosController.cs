@@ -11,6 +11,13 @@ namespace Proyecto_ED1_v1.Controllers
 {
     public class LecturaDatosController : Controller
     {
+        [HttpGet]
+        public ActionResult MostrarResultadosBusqueda()
+        {
+            return View(//agregar lista solicitado Tabla.Buscar.Solicitado);
+        }
+
+
         Tabla tabla = new Tabla();
         public static List<string> Lectura = new List<string>();
         public static string texto { get; set; }
@@ -49,7 +56,7 @@ namespace Proyecto_ED1_v1.Controllers
                 }
 
             }
-        }
+        }//crear else de textoIngresado sin /n
         #region Create table
         public void CreateTableEnter(int contadorLineas)
         {
