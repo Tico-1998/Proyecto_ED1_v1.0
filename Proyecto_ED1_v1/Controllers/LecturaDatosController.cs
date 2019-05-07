@@ -14,7 +14,7 @@ namespace Proyecto_ED1_v1.Controllers
         [HttpGet]
         public ActionResult MostrarResultadosBusqueda()
         {
-            return View(//agregar lista solicitado Tabla.Buscar.Solicitado);
+            return View();//agregar lista solicitado Tabla.Buscar.Solicitado);
         }
 
 
