@@ -1,19 +1,164 @@
-﻿
-@model Proyecto_ED1_v1.Controllers.HomeController
-@{
-    ViewData["Title"] = "SQLVista";
+﻿@{
+    ViewBag.Title = "SQL Server";
 }
-<h2>SQLVista</h2>
-@using (Html.BeginForm())
-{
-    <div>
-        @Html.TextAreaFor(Model => Model.texto, new { cols = 100, @rows = 10 })
+@using Proyecto_ED1_v1.Models
 
-        valor1:@ViewBag.textoIngresado
+@model ModelParams
+@*@{
+        Layout = null;
+    }*@
+
+
+<style type="text/css">
+    body {
+        font-family: Arial;
+        font-size: 10pt;
+    }
+
+    .Grid {
+        border: 1px solid #ccc;
+        border-collapse: collapse;
+        background-color: #fff;
+    }
+
+        .Grid th {
+            background-color: #B8DBFD;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .Grid th, .Grid td {
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .Grid img {
+            cursor: pointer;
+        }
+
+    .ChildGrid {
+        width: 100%;
+    }
+
+        .ChildGrid th {
+            background-color: #6C6C6C;
+            color: #fff;
+            font-weight: bold;
+        }
+</style>
+
+<div class="container-fluid">
+    <h1>SQL Server</h1>
+    <p></p>
+    <div class="row">
+        <div class="col-sm-3 " style="background-color:lightgray;">
+            Bases de Datos
+
+            <table cellpadding="0" cellspacing="0" class="Grid">
+                <tr>
+                    <th></th>
+                    <th>Base de Datos</th>
+                </tr>
+                @foreach (BaseDatos bd in @Model.BDS)
+                {
+                    <tr>
+                        <td>
+                            <img src="~/Images/plus.png" />
+                            <div style="display:none">
+                                <table cellpadding="0" cellspacing="0" class="ChildGrid">
+                                    <tr>
+                                        <th></th>
+                                        <th>Tablas</th>
+                                    </tr>
+                                    @foreach (Tablas tb in bd.Tables)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <img src="~/Images/plus.png" />
+                                                <div style="display:none">
+                                                    <table cellpadding="0" cellspacing="0" class="ChildGrid">
+                                                        <tr>
+                                                            <th>Columnas</th>
+                                                            <th>Tipo</th>
+                                                        </tr>
+                                                        @foreach (Columnas col in tb.columnas)
+                                                        {
+                                                            <tr>
+                                                                <td>@col.Columna</td>
+                                                                <td>@col.Tipo</td>
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                </div>
+                                            </td>
+                                            <td>@tb.table</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </td>
+                        <td>@bd.Nombre</td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <div class="col-sm-9 " style="background-color:white;">
+            <div class="row">
+
+                @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <h2> Busqueda SQL</h2>
+                    <br />
+                    <textarea rows="10" id="textAreaSQL" name="textAreaSQL" style="width:100%; max-width:90%; margin-left:10px; margin-right:10px;">
+                    </textarea>
+                    <br />
+                    <center>
+                        <input type="submit" value="Add" class="btn btn-success btn-lg" />
+                    </center>
+                }
+            </div>
+        </div>
+        <div class="row" style="background-color:white;">
+            Resultado de las busquesdas
+            <table cellpadding="0" cellspacing="0" class="Grid">
+                @foreach (ResultadoGrid resul in @Model.Resultado)
+                {
+                    <tr>
+                        @foreach (System.Data.DataColumn col in @resul.Resultado.Columns)
+                        {
+                            <th>@col.Caption</th>
+                        }
+
+
+                    </tr>
+                    for (int i = 0; i < @resul.Resultado.Rows.Count; i++)
+                    {
+                        <tr>
+                            @foreach (var cellValue in @resul.Resultado.Rows[i].ItemArray)
+                            {
+                                <td>@cellValue</td>
+                            }
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
     </div>
-    <input type="submit" value="Ingresar" />
-}
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        //Assign Click event to Plus Image.
+        $("body").on("click", "img[src*='plus.png']", function () {
+            $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+            $(this).attr("src", "/images/minus.png");
+        });
+        //Assign Click event to Minus Image.
+        $("body").on("click", "img[src*='minus.png']", function () {
+            $(this).attr("src", "/images/plus.png");
+            $(this).closest("tr").next().remove();
+        });
+    </script>
 
 
-
-
+</div>

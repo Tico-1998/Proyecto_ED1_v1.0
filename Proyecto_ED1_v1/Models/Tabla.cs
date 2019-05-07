@@ -372,14 +372,14 @@ namespace Proyecto_ED1_v1.Models
                         //variable no existe
                         break;
                 }
-                if (variables[0]!="*")
+                if (variables[0]!="*")//revisar posicion a ealuar podria ser variables[1]
                 {
                     for (int i = 0; i < PosicionVariables.Count - 1; i++)
                     {
                         switch (PosicionVariables[i])
                         {
                             case "id":
-                                Solicitado.Add(tabla.id);
+                                Solicitado.Add(tabla.id);//revisar que regresa solicitado
                                 break;
                             case "int1":
                                 Solicitado.Add(tabla.int1);
