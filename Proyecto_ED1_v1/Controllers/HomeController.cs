@@ -26,34 +26,75 @@ namespace Proyecto_ED1_v1.Controllers
 
 
             List<Tablas> tablasBD1 = new List<Tablas>();
-            tablasBD1.Add(new Tablas { table = "TableA", columnas = new List<Columnas>() });
+            int i = 0;
+            
+            tablasBD1.Add(new Tablas { table = Tabla.nombretablas[i], columnas = new List<Columnas>() });
+            i++;
 
 
             List<Columnas> ColumnasTabla1 = new List<Columnas>();
-            ColumnasTabla1.Add(new Columnas { Columna = "Col1", Tipo = "Varchar" });
+            Dictionary<string, string> variables = new Dictionary<string, string>();
+            //
+            string clave="";
+            if (Tabla.arraytablas[0]!=null)
+            {
+                clave = Tabla.nombretablas[0];
 
+                variables = Tabla.DiccionarioVariables[clave];
+                ColumnasTabla1.Add(new Columnas
+                {
+                    Tipo1 = variables["id"],
+                    Tipo2 = variables["int1"],
+                    Tipo3 = variables["int2"],
+                    Tipo4 = variables["int3"],
+                    Tipo5 = variables["varchar1"],
+                    Tipo6 = variables["varchar2"],
+                    Tipo7 = variables["varchar3"],
+                    Tipo8 = variables["dateTime1"],
+                    Tipo9 = variables["dateTime2"],
+                    Tipo10 = variables["dateTime3"]
+                });
+            }
+            else
+            {
+                ColumnasTabla1.Add(new Columnas { Columna = "Col1", Tipo1 = "Varchar" });
+            }
+
+            
             tablasBD1[0].columnas = ColumnasTabla1;
 
             pBDS[0].Tables = tablasBD1;
 
-            
+            string llave = Tabla.nombretablas[0];
+            List<Tabla> tabla = new List<Tabla>();
+            if (llave!=null)
+            {
+                tabla = Tabla.DiccionarioTabla[llave];
+            }
+           
+           
 
             List<ResultadoGrid> lstResultado = new List<ResultadoGrid>();
             List<ColumnasResult> Columnas = new List<ColumnasResult>();
             DataTable Resultado = new DataTable();
-
+            
             lstResultado.Add(new ResultadoGrid { Columnas = Columnas, Resultado = Resultado });
-
+            for (int j = 0; j < tabla.Count-1; j++)
+            {
+                Resultado.Rows.Add(tabla[j]);
+            }
+          
             
             ModelParams md = new ModelParams { BDS = pBDS, Resultado = lstResultado };
 
             return View(md);
         }
+ 
 
         [HttpPost]
         public ActionResult Index(string[] textAreaSQL)
         {
-            
+            LecturaDatosController.Leer(textAreaSQL);
             List<BaseDatos> pBDS = new List<BaseDatos>();
 
             pBDS.Add(new BaseDatos { Nombre = "Base1", Tables = new List<Tablas>() });
@@ -68,7 +109,7 @@ namespace Proyecto_ED1_v1.Controllers
 
 
             List<Columnas> ColumnasTabla1 = new List<Columnas>();
-            ColumnasTabla1.Add(new Columnas { Columna = "Col1", Tipo = "Varchar" });
+            //ColumnasTabla1.Add(new Columnas { Columna = "Col1", Tipo = "Varchar" });
 
             tablasBD1[0].columnas = ColumnasTabla1;
 
@@ -103,6 +144,7 @@ namespace Proyecto_ED1_v1.Controllers
 
             
             ModelParams md = new ModelParams { BDS = pBDS, Resultado = lstResultado };
+            ViewBag.Mensaje = Sintaxis.mensaje;
 
 
             return View(md);

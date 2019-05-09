@@ -5,13 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Estructuras
+namespace Proyecto_ED1_v1.Models
 {
 
     public delegate int compareTo<T>(T valor, T valor2);
-    #region arboles
 
-    #endregion
 
     public class ArbolBNodo<T>
     {
@@ -489,7 +487,7 @@ namespace Estructuras
         }
 
         #endregion
-       
+
         #region Escritura de archivo
 
 

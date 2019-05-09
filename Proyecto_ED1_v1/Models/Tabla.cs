@@ -2,15 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Proyecto_ED1_v1.Models;
+
 
 namespace Proyecto_ED1_v1.Models
 {
     public class Tabla
     {
+        
+        public static ArbolB<Tabla> Arbol = new ArbolB<Tabla>();
+        public static Dictionary<string, int> posicionTabla = new Dictionary<string, int>();
+        public static Dictionary<string, ArbolB<Tabla>> Arboles = new Dictionary<string, ArbolB<Tabla>>();
         public string TextoIngresado = "";
         public static Dictionary<string, List<Tabla>> DiccionarioTabla = new Dictionary<string, List<Tabla>>();
+        public static List<Tabla>[] arraytablas = new List<Tabla>[5];
+        public static string[] nombretablas = new string[5];
         public static Dictionary<string, string> Variables = new Dictionary<string, string>();//la llave es el nombre de la variable, el valor es cual variable es 
-        public string id;
+        public static Dictionary<string, Dictionary<string,string>> DiccionarioVariables= new Dictionary<string,Dictionary<string,string>>();
+        public static int cantidadTablas = 0;
+        public string id;        
         public string int1;
         public string int2;
         public string int3;
@@ -20,11 +30,7 @@ namespace Proyecto_ED1_v1.Models
         public string dateTime1;
         public string dateTime2;
         public string dateTime3;
-        public static void prueba(string prueba)
-        {
-            Console.WriteLine(prueba);
-            Console.ReadKey();
-        }
+        public string nombre;
         public static void CrearTabla(Tabla tabla, string nombre)
         {            
             Variables.Add(tabla.int1,"int1");
@@ -37,16 +43,52 @@ namespace Proyecto_ED1_v1.Models
             Variables.Add(tabla.dateTime1, "dateTime1");
             Variables.Add(tabla.dateTime2, "dateTime2");
             Variables.Add(tabla.dateTime3, "dateTime3");
+            tabla.nombre = nombre;
             List<Tabla> Tabla = new List<Tabla>();
             Tabla.Add(tabla);            
             DiccionarioTabla.Add(nombre, Tabla);
+            Arboles.Add(nombre, Arbol);
+            if (cantidadTablas > 5)
+            {
+                if (arraytablas[0] == null)
+                {
+                    cantidadTablas = 0;
+                }
+                else if (arraytablas[1] == null)
+                {
+                    cantidadTablas = 1;
+                }
+                else if (arraytablas[2] == null)
+                {
+                    cantidadTablas = 2;
+                }
+                else if (arraytablas[3] == null)
+                {
+                    cantidadTablas = 3;
+                }
+                else if (arraytablas[4] == null)
+                {
+                    cantidadTablas = 4;
+                }
+            }
+            arraytablas[cantidadTablas] = Tabla;
+            nombretablas[cantidadTablas] = tabla.nombre;
+            posicionTabla.Add(nombre, cantidadTablas);
+            cantidadTablas++;
         }
         public static void ElimiarTabla(string Clave)
         {
             DiccionarioTabla.Remove(Clave);
+            Arboles.Remove(Clave);
+            int posicion = posicionTabla[Clave];
+            arraytablas[posicion] = null;
+            nombretablas[posicion] = null;
+            cantidadTablas--;
         }
         public static void EliminarElemento(string Llave, string variable, string nombre)
         {
+            ArbolBNodo<Tabla> Raiz = new ArbolBNodo<Tabla>();
+            ArbolB<Tabla> Eliminar = new ArbolB<Tabla>();
             Tabla tabla = new Tabla();
             List<Tabla> eliminando = new List<Tabla>();
             eliminando = DiccionarioTabla[Llave];//se optiene la lista correcta
@@ -204,6 +246,14 @@ namespace Proyecto_ED1_v1.Models
             DiccionarioTabla.Remove(Llave);
             eliminando.Remove(tabla);
             DiccionarioTabla.Add(Llave, eliminando);
+            Eliminar = Arboles[Llave];
+            Arboles.Remove(Llave);
+            Raiz = Eliminar.Raiz;
+            Eliminar.Eliminar(tabla, Raiz);
+            Arboles.Add(Llave, Eliminar);
+            int posicion = posicionTabla[Llave];
+            arraytablas[posicion] = eliminando;
+            
         }
         public static void Buscar(List<string> variables, string nombreTabla, string Posicion, string Valor)
         {
@@ -466,7 +516,66 @@ namespace Proyecto_ED1_v1.Models
                //mostrar solicitado 
             }
         }
-        //metodo agregar
+        public static void Insertar(List<string>variables,string nombreTabla, List<string>valores)
+        {
+            ArbolB<Tabla> arbolInsertar = new ArbolB<Tabla>();
+            Tabla tabla = new Tabla();
+            List<Tabla> listaAgregar = new List<Tabla>();
+            Dictionary<string, string> dicionarioVariables = new Dictionary<string, string>();
+            dicionarioVariables = DiccionarioVariables[nombreTabla];
+            List<string> listaVaribles = new List<string>();
+            string tipoVariable;
+            for (int i = 0; i < variables.Count()-1; i++)
+            {
+                tipoVariable = Variables[variables[i]];
+                listaVaribles.Add(tipoVariable);
+                switch (listaVaribles[i])
+                {
+                    case "id":
+                        tabla.id = valores[i];
+                        break;
+                    case "int1":
+                        tabla.int1 = valores[i];
+                        break;
+                    case "int2":
+                        tabla.int2 = valores[i];
+                        break;
+                    case "int3":
+                        tabla.int3 = valores[i];
+                        break;
+                    case "varchar1":
+                        tabla.varchar1 = valores[i];
+                        break;
+                    case "varchar2":
+                        tabla.varchar2 = valores[i];
+                        break;
+                    case "varchar3":
+                        tabla.varchar3 = valores[i];
+                        break;
+                    case "dateTime1":
+                        tabla.dateTime1 = valores[i];
+                        break;
+                    case "dateTime2":
+                        tabla.dateTime2 = valores[i];
+                        break;
+                    case "dateTime3":
+                        tabla.dateTime3 = valores[i];
+                        break;
+                    default:
+                        break;
+                }
+            }
+            listaAgregar = DiccionarioTabla[nombreTabla];
+            DiccionarioTabla.Remove(nombreTabla);
+            listaAgregar.Add(tabla);
+            DiccionarioTabla.Add(nombreTabla, listaAgregar);
+            arbolInsertar = Arboles[nombreTabla];
+            Arboles.Remove(nombreTabla);
+            arbolInsertar.Insertar(tabla);
+            Arboles.Add(nombreTabla, arbolInsertar);
+            int posicion = posicionTabla[nombreTabla];
+            arraytablas[posicion] = listaAgregar;
+        }
 
     }
 }
