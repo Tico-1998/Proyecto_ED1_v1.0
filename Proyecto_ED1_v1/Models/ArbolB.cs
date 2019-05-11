@@ -285,7 +285,21 @@ namespace Proyecto_ED1_v1.Models
             {
                 for (int i = 0; i < Lista.Value.Count(); i++)
                 {                   
-                    outputFile.WriteLine(Convert.ToString(Lista.Value[i].GetHashCode()));                    
+                    outputFile.WriteLine(Convert.ToString(Lista.Value[i].GetHashCode()));
+                    /*for (int l = 0; l < 5; l++)
+                    {
+                        outputFile.WriteLine(Raiz);
+                        for (int j = 0; j < 6; j++)
+                        {
+                            outputFile.WriteLine(Raiz.Hijo[j]);
+                            for (int k = 0; k < 5; k++)
+                            {
+                                outputFile.WriteLine(Raiz.Hijo[j].Valores[k]);
+                            }
+                        }
+                    } */                     
+                                             
+                    
                 }
             }
         }

@@ -32,8 +32,11 @@ namespace Proyecto_ED1_v1.Models
         public string dateTime2;
         public string dateTime3;
         public string nombre;
+        
         public static void CrearTabla(Tabla tabla, string nombre)
         {
+
+
             if (tabla.int1 != null) { Variables.Add(tabla.int1, "int1"); }
             if (tabla.int2 != null) { Variables.Add(tabla.int2, "int2"); }
             if (tabla.int3 != null) { Variables.Add(tabla.int3, "int3"); }
@@ -78,7 +81,7 @@ namespace Proyecto_ED1_v1.Models
             posicionTabla.Add(nombre, cantidadTablas);
             cantidadTablas++;
             Arbol.Orden = 5;
-           
+            
         }
         public static void ElimiarTabla(string Clave)
         {
