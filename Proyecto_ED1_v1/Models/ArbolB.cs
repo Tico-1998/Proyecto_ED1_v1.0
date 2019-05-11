@@ -8,8 +8,8 @@ using System.IO;
 namespace Proyecto_ED1_v1.Models
 {
 
-    public delegate int compareTo<T>(T valor, T valor2);
-
+    public delegate int compareTo<T>(T Tabla,T Valor);
+    
 
     public class ArbolBNodo<T>
     {
@@ -26,6 +26,7 @@ namespace Proyecto_ED1_v1.Models
 
     public class ArbolB<T>
     {
+        public Lazy<List<T>> Datos = new Lazy<List<T>>();
         #region variables
         //variables
         public int Minimo { get; set; }
@@ -39,7 +40,7 @@ namespace Proyecto_ED1_v1.Models
 
         #region constructores
         //Constructores
-        public ArbolB(int Orden,compareTo<T> Compare)
+        public ArbolB(int Orden,compareTo<T> Compare )
         {
             this.Orden = Orden;
             Minimo = (Orden - 1) / 2;
@@ -60,21 +61,31 @@ namespace Proyecto_ED1_v1.Models
         public static bool arbolVacio(ArbolBNodo<T> nodo) => nodo == null;
         private void BuscarNodo(T clave, ArbolBNodo<T> P,ref bool Encontadro, ref int K)
         {
-            if(Comparador(clave,P.Valores[1])==-1)
+            try
             {
-                Encontadro = false;
-                K = 0;//rama por donde continua
-            }
-            else
-            {
-                //revisa los valores del nodo
-                K = P.Cuenta;
-                while (Comparador(clave,P.Valores[K])==-1&&K>1)
+                int valorClave = clave.GetHashCode();
+                int valor = P.Valores[1].GetHashCode();
+                if (valor < valorClave)
                 {
-                    K--;
-                    Encontadro = (Comparador(clave, P.Valores[K]) == 0);
+                    Encontadro = false;
+                    K = 0;//rama por donde continua
+                }
+                else
+                {
+                    //revisa los valores del nodo
+                    K = P.Cuenta;
+                    while (valorClave < valor && K > 1)
+                    {
+                        K--;
+                        Encontadro = (Comparador(clave, P.Valores[K]) == 0);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                //agregar mensaje error
+            }
+            
         }//Fin metodo BuscarNodo
         public void Buscar(T clave, ArbolBNodo<T> Raiz, ref bool encontrado, ref ArbolBNodo<T> N,ref int posicion)
         {
@@ -224,6 +235,9 @@ namespace Proyecto_ED1_v1.Models
             var nuevaraiz = this.Raiz;
             Insertar(Clave, ref nuevaraiz);
             this.Raiz = nuevaraiz;
+            Datos.Value.Add(Clave);
+            Archivo(Datos);
+            //Inorder(Raiz);
         }//Fin metodo Insertar   
 
         //Fin Insertar
@@ -231,15 +245,24 @@ namespace Proyecto_ED1_v1.Models
 
         #region Recorrido
         //Recorrido
-        private void Inorder(ArbolBNodo<T> Recorrido)
+        public  void Inorder(ArbolBNodo<T> Recorrido)
         {
             if (!arbolVacio(Recorrido))
             {
-                Inorder(Recorrido.Hijo[0]);
+                if (Recorrido.Hijo[0]!=null)
+                {
+                    Inorder(Recorrido.Hijo[0]);
+                }
                 for (int i = 1; i <= Recorrido.Cuenta; i++)
                 {
-                    Lista.Value.Add(Recorrido.Valores[i]);
-                    Inorder(Recorrido.Hijo[i]);
+                    if (Recorrido.Valores[i]!=null)
+                    {
+                        Lista.Value.Add(Recorrido.Valores[i]);
+                        if (Recorrido.Hijo[i] != null)
+                        {
+                            Inorder(Recorrido.Hijo[i]);
+                        }
+                    }                 
                 }
             }
         }//fin metodo Inorder
@@ -254,16 +277,15 @@ namespace Proyecto_ED1_v1.Models
         #endregion
     
         #region archivo
-        private void Archivo(Lazy<List<T>> Lista)
+        public  void Archivo(Lazy<List<T>> Lista)
         {
             string nombre = System.IO.Path.GetRandomFileName();
-            string path = Convert.ToString((Environment.SpecialFolder.Desktop));
-            string pathfinal = System.IO.Path.Combine(path, nombre);
+            string pathfinal = nombre;
             using (StreamWriter outputFile = new StreamWriter(pathfinal))
             {
-                for (int i = 0; i < Lista.Value.Count()-1; i++)
-                {
-                    outputFile.WriteLine(Lista.Value[i]);
+                for (int i = 0; i < Lista.Value.Count(); i++)
+                {                   
+                    outputFile.WriteLine(Convert.ToString(Lista.Value[i].GetHashCode()));                    
                 }
             }
         }

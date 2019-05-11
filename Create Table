@@ -1,0 +1,79 @@
+Create Table
+Carro
+(
+Id
+Cantidad Int
+Nombre Varchar(100)
+)
+
+
+Drop Table
+Carro
+
+
+Insert Into
+Carro
+(
+Id,
+Cantidad
+Nombre
+)
+Values
+(
+1,
+2,
+Audi
+)
+
+Insert Into
+Carro
+(
+Id,
+Cantidad,
+Nombre
+)
+Values
+(
+2,
+1,
+Hyundai
+)
+
+Delete From
+Carro
+Where 
+Id = 1
+
+Select
+Id,
+Cantidad
+From
+Carro
+
+Select
+*
+From
+Carro
+
+Select
+Id
+From
+Carro
+Where
+Id = 1
+
+Select
+*
+From
+Carro
+Where
+Id = 1
+
+FALTA
+	selecte con enter
+	todos sin enter
+	llamar metodo escribir archivo 
+	usar arbol b+
+	archivo excel
+	leer bien txt
+	mandar datos a la vista
