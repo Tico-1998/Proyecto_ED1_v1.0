@@ -12,10 +12,9 @@ namespace Proyecto_ED1_v1.Controllers
 {
     public class HomeController : Controller
     {
-        public string texto { get; set; }
         public ActionResult Index()
         {
-            
+            //Al inicialisar tienes que crear el pBDS como te lo tengo de ejemplo usando tus lista para que se pueda mostrar en la vista.
             List<BaseDatos> pBDS = new List<BaseDatos>();
 
             pBDS.Add(new BaseDatos { Nombre = "Base1", Tables = new List<Tablas>() });
@@ -26,75 +25,40 @@ namespace Proyecto_ED1_v1.Controllers
 
 
             List<Tablas> tablasBD1 = new List<Tablas>();
-            int i = 0;
-            
-            tablasBD1.Add(new Tablas { table = Tabla.nombretablas[i], columnas = new List<Columnas>() });
-            i++;
+            tablasBD1.Add(new Tablas { table = Tabla.nombretablas[0], columnas = new List<Columnas>() });
+            Tabla tabbla = new Tabla();
+            if (Tabla.Solicitado.Count()>0)
+            {
+                tabbla = Tabla.Solicitado[0];
+            }
 
 
             List<Columnas> ColumnasTabla1 = new List<Columnas>();
-            Dictionary<string, string> variables = new Dictionary<string, string>();
-            //
-            string clave="";
-            if (Tabla.arraytablas[0]!=null)
-            {
-                clave = Tabla.nombretablas[0];
+            ColumnasTabla1.Add(new Columnas { Columna = tabbla, Tipo = Tabla.nombretablas[0] });
 
-                variables = Tabla.DiccionarioVariables[clave];
-                ColumnasTabla1.Add(new Columnas
-                {
-                    Tipo1 = variables["id"],
-                    Tipo2 = variables["int1"],
-                    Tipo3 = variables["int2"],
-                    Tipo4 = variables["int3"],
-                    Tipo5 = variables["varchar1"],
-                    Tipo6 = variables["varchar2"],
-                    Tipo7 = variables["varchar3"],
-                    Tipo8 = variables["dateTime1"],
-                    Tipo9 = variables["dateTime2"],
-                    Tipo10 = variables["dateTime3"]
-                });
-            }
-            else
-            {
-                ColumnasTabla1.Add(new Columnas { Columna = "Col1", Tipo1 = "Varchar" });
-            }
-
-            
             tablasBD1[0].columnas = ColumnasTabla1;
 
             pBDS[0].Tables = tablasBD1;
 
-            string llave = Tabla.nombretablas[0];
-            List<Tabla> tabla = new List<Tabla>();
-            if (llave!=null)
-            {
-                tabla = Tabla.DiccionarioTabla[llave];
-            }
-           
-           
+            // Cargar el resultado del Grid Aqui VA VACIO YA QUE ES CUANDO INICIA PAGINA
 
             List<ResultadoGrid> lstResultado = new List<ResultadoGrid>();
             List<ColumnasResult> Columnas = new List<ColumnasResult>();
             DataTable Resultado = new DataTable();
-            
+
             lstResultado.Add(new ResultadoGrid { Columnas = Columnas, Resultado = Resultado });
-            for (int j = 0; j < tabla.Count-1; j++)
-            {
-                Resultado.Rows.Add(tabla[j]);
-            }
-          
-            
+
+            //pBDS ES EL ARBOL PARA LLENAR EL GRID DE LAS BD Y TABLAS lstResutado debe ser un clase con una lista columnas y lista resultados para llenar el grid.
             ModelParams md = new ModelParams { BDS = pBDS, Resultado = lstResultado };
 
             return View(md);
         }
- 
 
         [HttpPost]
         public ActionResult Index(string[] textAreaSQL)
         {
-            LecturaDatosController.Leer(textAreaSQL);
+            // en textAreaSQL viene en forma de array lo que escribas dentro del text area y a partir de ahi tienes que desarrollar tus metodos
+            // para poder llenar pBDS que serian las bd yo utilize listas pero debes usar lo que necesites
             List<BaseDatos> pBDS = new List<BaseDatos>();
 
             pBDS.Add(new BaseDatos { Nombre = "Base1", Tables = new List<Tablas>() });
@@ -105,21 +69,29 @@ namespace Proyecto_ED1_v1.Controllers
 
 
             List<Tablas> tablasBD1 = new List<Tablas>();
-            tablasBD1.Add(new Tablas { table = "TableA", columnas = new List<Columnas>() });
+            tablasBD1.Add(new Tablas { table = Tabla.nombretablas[0], columnas = new List<Columnas>() });
 
 
             List<Columnas> ColumnasTabla1 = new List<Columnas>();
-            //ColumnasTabla1.Add(new Columnas { Columna = "Col1", Tipo = "Varchar" });
+            Tabla tab = new Tabla();
+            if (Tabla.Solicitado.Count()>0)
+            {
+                tab = Tabla.Solicitado[0];
+            }
+
+            ColumnasTabla1.Add(new Columnas { Columna = tab, Tipo = Tabla.nombretablas[0] });
 
             tablasBD1[0].columnas = ColumnasTabla1;
 
             pBDS[0].Tables = tablasBD1;
 
-            
+            //Cargar el resultado del Grid Aqui
+            // En esta parte tenes que crear el datatable como viene a continuacion con las columnas y los datos de las columnas despues eso 
+            // va a hacer que en la vista se vean los resultados
             List<ResultadoGrid> lstResultado = new List<ResultadoGrid>();
 
             List<ColumnasResult> Columnas = new List<ColumnasResult>();
-            
+
             Columnas.Add(new ColumnasResult { Columna = "Col1" });
             Columnas.Add(new ColumnasResult { Columna = "Col2" });
             Columnas.Add(new ColumnasResult { Columna = "Col3" });
@@ -133,7 +105,7 @@ namespace Proyecto_ED1_v1.Controllers
 
             DataRow DR = Resultado.NewRow();
 
-            DR["Col1"] = "TEST1";
+            DR["Col1"] = Tabla.Solicitado[0];
             DR["Col2"] = "2";
             DR["Col3"] = "TEST3";
 
@@ -142,37 +114,40 @@ namespace Proyecto_ED1_v1.Controllers
             lstResultado.Add(new ResultadoGrid { Columnas = Columnas, Resultado = Resultado });
 
 
-            
+            //pBDS ES EL ARBOL PARA LLENAR EL GRID DE LAS BD Y TABLAS lstResutado debe ser un clase con una lista columnas y lista resultados para llenar el grid.
             ModelParams md = new ModelParams { BDS = pBDS, Resultado = lstResultado };
-            ViewBag.Mensaje = Sintaxis.mensaje;
 
 
             return View(md);
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+        //public ActionResult Resultados(String textAreaSQL)
+        //{
+        //    ///you can use int txtId  here 
+        //    ///
 
-            return View();
-        }
+        //    List<BaseDatos> BDS = new List<BaseDatos>();
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
+        //    BDS.Add(new BaseDatos { Nombre = "Base1", Tables = new List<Tablas>() });
+        //    BDS.Add(new BaseDatos { Nombre = "Base2", Tables = new List<Tablas>() });
+        //    BDS.Add(new BaseDatos { Nombre = "Base3", Tables = new List<Tablas>() });
+        //    BDS.Add(new BaseDatos { Nombre = "Base4", Tables = new List<Tablas>() });
+        //    BDS.Add(new BaseDatos { Nombre = "Base5", Tables = new List<Tablas>() });
 
-            return View();
-        }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        //    List<Tablas> tablasBD1 = new List<Tablas>();
+        //    tablasBD1.Add(new Tablas { table = "TableA", columnas = new List<Columnas>() });
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+
+        //    List<Columnas> ColumnasTabla1 = new List<Columnas>();
+        //    ColumnasTabla1.Add(new Columnas { Columna = "Col1", Tipo = "Varchar" });
+
+        //    tablasBD1[0].columnas = ColumnasTabla1;
+
+        //    BDS[3].Tables = tablasBD1;
+
+        //    return View(BDS);
+        //}
+
     }
 }

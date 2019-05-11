@@ -7,9 +7,10 @@ using Proyecto_ED1_v1.Models;
 
 namespace Proyecto_ED1_v1.Models
 {
+    //public delegate int compareTo<T>(T Tabla, T Valor);
     public class Tabla
     {
-        
+        public static List<Tabla> Solicitado = new List<Tabla>();
         public static ArbolB<Tabla> Arbol = new ArbolB<Tabla>();
         public static Dictionary<string, int> posicionTabla = new Dictionary<string, int>();
         public static Dictionary<string, ArbolB<Tabla>> Arboles = new Dictionary<string, ArbolB<Tabla>>();
@@ -32,18 +33,19 @@ namespace Proyecto_ED1_v1.Models
         public string dateTime3;
         public string nombre;
         public static void CrearTabla(Tabla tabla, string nombre)
-        {            
-            Variables.Add(tabla.int1,"int1");
-            Variables.Add(tabla.int2,"int2");
-            Variables.Add(tabla.int3,"int3");
-            Variables.Add(tabla.id,"id");
-            Variables.Add(tabla.varchar1, "varchar1");
-            Variables.Add(tabla.varchar2, "varchar2");
-            Variables.Add(tabla.varchar3, "varchar3");
-            Variables.Add(tabla.dateTime1, "dateTime1");
-            Variables.Add(tabla.dateTime2, "dateTime2");
-            Variables.Add(tabla.dateTime3, "dateTime3");
+        {
+            if (tabla.int1 != null) { Variables.Add(tabla.int1, "int1"); }
+            if (tabla.int2 != null) { Variables.Add(tabla.int2, "int2"); }
+            if (tabla.int3 != null) { Variables.Add(tabla.int3, "int3"); }
+            if (tabla.id != null) { Variables.Add(tabla.id, "id"); }
+            if (tabla.varchar1 != null) { Variables.Add(tabla.varchar1, "varchar1"); }
+            if (tabla.varchar2 != null) { Variables.Add(tabla.varchar2, "varchar2"); }
+            if (tabla.varchar3 != null) { Variables.Add(tabla.varchar3, "varchar3"); }
+            if (tabla.dateTime1 != null) { Variables.Add(tabla.dateTime1, "dateTime1"); }
+            if (tabla.dateTime2 != null) { Variables.Add(tabla.dateTime2, "dateTime2"); }
+            if (tabla.dateTime3 != null) { Variables.Add(tabla.dateTime3, "dateTime3"); }
             tabla.nombre = nombre;
+            DiccionarioVariables.Add(nombre, Variables);
             List<Tabla> Tabla = new List<Tabla>();
             Tabla.Add(tabla);            
             DiccionarioTabla.Add(nombre, Tabla);
@@ -75,6 +77,8 @@ namespace Proyecto_ED1_v1.Models
             nombretablas[cantidadTablas] = tabla.nombre;
             posicionTabla.Add(nombre, cantidadTablas);
             cantidadTablas++;
+            Arbol.Orden = 5;
+           
         }
         public static void ElimiarTabla(string Clave)
         {
@@ -94,154 +98,169 @@ namespace Proyecto_ED1_v1.Models
             eliminando = DiccionarioTabla[Llave];//se optiene la lista correcta
             bool Encontrado = true;
             int contadorPosiciones = 0;
-            tabla = eliminando[0];
-            switch (Variables[variable])//diccionario que guarda las variables 
+            try
             {
-                case "id":
-                    while (Encontrado)
-                    {
-                        if (tabla.id == nombre)
+                switch (Variables[variable])//diccionario que guarda las variables 
+                {
+                    case "id":
+                        while (Encontrado)
                         {
-                            Encontrado = false;
+                            tabla = eliminando[contadorPosiciones];
+                            if (tabla.id == nombre)
+                            {
+                                Encontrado = false;
+                            }
+                            else
+                            {
+                                contadorPosiciones++;
+                            }
                         }
-                        else
+                        tabla = eliminando[contadorPosiciones];
+                        break;
+                    case "int1":
+                        while (Encontrado)
                         {
-                            contadorPosiciones++;
+                            tabla = eliminando[contadorPosiciones];
+                            if (tabla.int1 == nombre)
+                            {
+                                Encontrado = false;
+                            }
+                            else
+                            {
+                                contadorPosiciones++;
+                            }
                         }
-                    }
-                    tabla = eliminando[contadorPosiciones];
-                    break;
-                case "int1":
-                    while (Encontrado)
-                    {
-                        if (tabla.int1 == nombre)
+                        tabla = eliminando[contadorPosiciones];
+                        break;
+                    case "int2":
+                        while (Encontrado)
                         {
-                            Encontrado = false;
+                            tabla = eliminando[contadorPosiciones];
+                            if (tabla.int2 == nombre)
+                            {
+                                Encontrado = false;
+                            }
+                            else
+                            {
+                                contadorPosiciones++;
+                            }
                         }
-                        else
+                        tabla = eliminando[contadorPosiciones];
+                        break;
+                    case "int3":
+                        while (Encontrado)
                         {
-                            contadorPosiciones++;
+                            tabla = eliminando[contadorPosiciones];
+                            if (tabla.int3 == nombre)
+                            {
+                                Encontrado = false;
+                            }
+                            else
+                            {
+                                contadorPosiciones++;
+                            }
                         }
-                    }
-                    tabla = eliminando[contadorPosiciones];
-                    break;
-                case "int2":
-                    while (Encontrado)
-                    {
-                        if (tabla.int2 == nombre)
+                        tabla = eliminando[contadorPosiciones];
+                        break;
+                    case "varchar1":
+                        while (Encontrado)
                         {
-                            Encontrado = false;
+                            tabla = eliminando[contadorPosiciones];
+                            if (tabla.varchar1 == nombre)
+                            {
+                                Encontrado = false;
+                            }
+                            else
+                            {
+                                contadorPosiciones++;
+                            }
                         }
-                        else
+                        tabla = eliminando[contadorPosiciones];
+                        break;
+                    case "varchar2":
+                        while (Encontrado)
                         {
-                            contadorPosiciones++;
+                            tabla = eliminando[contadorPosiciones];
+                            if (tabla.varchar2 == nombre)
+                            {
+                                Encontrado = false;
+                            }
+                            else
+                            {
+                                contadorPosiciones++;
+                            }
                         }
-                    }
-                    tabla = eliminando[contadorPosiciones];
-                    break;
-                case "int3":
-                    while (Encontrado)
-                    {
-                        if (tabla.int3 == nombre)
+                        tabla = eliminando[contadorPosiciones];
+                        break;
+                    case "varchar3":
+                        while (Encontrado)
                         {
-                            Encontrado = false;
+                            tabla = eliminando[contadorPosiciones];
+                            if (tabla.varchar3 == nombre)
+                            {
+                                Encontrado = false;
+                            }
+                            else
+                            {
+                                contadorPosiciones++;
+                            }
                         }
-                        else
+                        tabla = eliminando[contadorPosiciones];
+                        break;
+                    case "dateTime1":
+                        while (Encontrado)
                         {
-                            contadorPosiciones++;
+                            tabla = eliminando[contadorPosiciones];
+                            if (tabla.dateTime1 == nombre)
+                            {
+                                Encontrado = false;
+                            }
+                            else
+                            {
+                                contadorPosiciones++;
+                            }
                         }
-                    }
-                    tabla = eliminando[contadorPosiciones];
-                    break;
-                case "varchar1":
-                    while (Encontrado)
-                    {
-                        if (tabla.varchar1 == nombre)
+                        tabla = eliminando[contadorPosiciones];
+                        break;
+                    case "dateTime2":
+                        while (Encontrado)
                         {
-                            Encontrado = false;
+                            tabla = eliminando[contadorPosiciones];
+                            if (tabla.dateTime2 == nombre)
+                            {
+                                Encontrado = false;
+                            }
+                            else
+                            {
+                                contadorPosiciones++;
+                            }
                         }
-                        else
+                        tabla = eliminando[contadorPosiciones];
+                        break;
+                    case "dateTime3":
+                        while (Encontrado)
                         {
-                            contadorPosiciones++;
+                            tabla = eliminando[contadorPosiciones];
+                            if (tabla.dateTime3 == nombre)
+                            {
+                                Encontrado = false;
+                            }
+                            else
+                            {
+                                contadorPosiciones++;
+                            }
                         }
-                    }
-                    tabla = eliminando[contadorPosiciones];
-                    break;
-                case "varchar2":
-                    while (Encontrado)
-                    {
-                        if (tabla.varchar2 == nombre)
-                        {
-                            Encontrado = false;
-                        }
-                        else
-                        {
-                            contadorPosiciones++;
-                        }
-                    }
-                    tabla = eliminando[contadorPosiciones];
-                    break;
-                case "varchar3":
-                    while (Encontrado)
-                    {
-                        if (tabla.varchar3 == nombre)
-                        {
-                            Encontrado = false;
-                        }
-                        else
-                        {
-                            contadorPosiciones++;
-                        }
-                    }
-                    tabla = eliminando[contadorPosiciones];
-                    break;
-                case "dateTime1":
-                    while (Encontrado)
-                    {
-                        if (tabla.dateTime1 == nombre)
-                        {
-                            Encontrado = false;
-                        }
-                        else
-                        {
-                            contadorPosiciones++;
-                        }
-                    }
-                    tabla = eliminando[contadorPosiciones];
-                    break;
-                case "dateTime2":
-                    while (Encontrado)
-                    {
-                        if (tabla.dateTime2 == nombre)
-                        {
-                            Encontrado = false;
-                        }
-                        else
-                        {
-                            contadorPosiciones++;
-                        }
-                    }
-                    tabla = eliminando[contadorPosiciones];
-                    break;
-                case "dateTime3":
-                    while (Encontrado)
-                    {
+                        tabla = eliminando[contadorPosiciones];
+                        break;
+                    default:
+                        //mensaje error en varibale 
+                        break;
 
-                        if (tabla.dateTime3 == nombre)
-                        {
-                            Encontrado = false;
-                        }
-                        else
-                        {
-                            contadorPosiciones++;
-                        }
-                    }
-                    tabla = eliminando[contadorPosiciones];
-                    break;
-                default:
-                    //mensaje error en varibale 
-                    break;
-
+                }
+            }
+            catch (Exception ex)
+            {
+                //Valor no existe
             }
             DiccionarioTabla.Remove(Llave);
             eliminando.Remove(tabla);
@@ -257,12 +276,14 @@ namespace Proyecto_ED1_v1.Models
         }
         public static void Buscar(List<string> variables, string nombreTabla, string Posicion, string Valor)
         {
+            Dictionary<int, Tabla> tabla_solicitada = new Dictionary<int, Tabla>();
+            Tabla pedido = new Tabla();
             Tabla tabla = new Tabla();
             List<Tabla> Resultado = new List<Tabla>();
             Resultado = DiccionarioTabla[nombreTabla];
             List<string> PosicionVariables = new List<string>();
-            List<string> Solicitado = new List<string>();
-            for (int i = 0; i < variables.Count - 1; i++)
+
+            for (int i = 0; i < variables.Count; i++)
             {
                 if (variables[0] != "*")
                 {
@@ -424,93 +445,146 @@ namespace Proyecto_ED1_v1.Models
                 }
                 if (variables[0]!="*")//revisar posicion a ealuar podria ser variables[1]
                 {
-                    for (int i = 0; i < PosicionVariables.Count - 1; i++)
+                    for (int i = 0; i < PosicionVariables.Count; i++)
                     {
                         switch (PosicionVariables[i])
                         {
                             case "id":
-                                Solicitado.Add(tabla.id);//revisar que regresa solicitado
+                                pedido.id=(tabla.id);//revisar que regresa solicitado
                                 break;
                             case "int1":
-                                Solicitado.Add(tabla.int1);
+                                pedido.int1=(tabla.int1);
                                 break;
                             case "int2":
-                                Solicitado.Add(tabla.int2);
+                                pedido.int2=(tabla.int2);
                                 break;
                             case "int3":
-                                Solicitado.Add(tabla.int3);
+                                pedido.int3=(tabla.int3);
                                 break;
                             case "varchar1":
-                                Solicitado.Add(tabla.varchar1);
+                                pedido.varchar1=(tabla.varchar1);
                                 break;
                             case "varchar2":
-                                Solicitado.Add(tabla.varchar2);
+                                pedido.varchar2=(tabla.varchar2);
                                 break;
                             case "varchar3":
-                                Solicitado.Add(tabla.varchar3);
+                                pedido.varchar3=(tabla.varchar3);
                                 break;
                             case "dateTime1":
-                                Solicitado.Add(tabla.dateTime1);
+                                pedido.dateTime1=(tabla.dateTime1);
                                 break;
                             case "dateTime2":
-                                Solicitado.Add(tabla.dateTime2);
+                                pedido.dateTime2=(tabla.dateTime2);
                                 break;
                             case "dateTime3":
-                                Solicitado.Add(tabla.dateTime3);
+                                pedido.dateTime3=(tabla.dateTime3);
                                 break;
                             default:
                                 break;
                         }
-                    }       
+                    }
+                    Solicitado.Add(pedido);
                 }
                 else
                 {
-                    //mostrar todos los valores de tabla
+                    Solicitado.Add(tabla);
                 }
                 //mostrar valores de la lista solicitado
             }
             else
             {
-                for (int i = 0; i < Resultado.Count-1; i++)
+                if (variables[0] != "*")
                 {
-                    tabla = Resultado[i];
-                    for (int j = 0; j < PosicionVariables.Count - 1; j++)
+                    for (int i = 0; i < Resultado.Count; i++)
                     {
-                        switch (PosicionVariables[i])
+                        for (int j = 0; j < PosicionVariables.Count; j++)
                         {
-                            case "id":
-                                Solicitado.Add(tabla.id);
-                                break;
-                            case "int1":
-                                Solicitado.Add(tabla.int1);
-                                break;
-                            case "int2":
-                                Solicitado.Add(tabla.int2);
-                                break;
-                            case "int3":
-                                Solicitado.Add(tabla.int3);
-                                break;
-                            case "varchar1":
-                                Solicitado.Add(tabla.varchar1);
-                                break;
-                            case "varchar2":
-                                Solicitado.Add(tabla.varchar2);
-                                break;
-                            case "varchar3":
-                                Solicitado.Add(tabla.varchar3);
-                                break;
-                            case "dateTime1":
-                                Solicitado.Add(tabla.dateTime1);
-                                break;
-                            case "dateTime2":
-                                Solicitado.Add(tabla.dateTime2);
-                                break;
-                            case "dateTime3":
-                                Solicitado.Add(tabla.dateTime3);
-                                break;
-                            default:
-                                break;
+                            tabla = Resultado[i];
+                            switch (PosicionVariables[j])
+                            {
+                                case "id":
+                                    pedido.id = (tabla.id);
+                                    break;
+                                case "int1":
+                                    pedido.int1 = (tabla.int1);
+                                    break;
+                                case "int2":
+                                    pedido.int2 = (tabla.int2);
+                                    break;
+                                case "int3":
+                                    pedido.int3 = (tabla.int3);
+                                    break;
+                                case "varchar1":
+                                    pedido.varchar1 = (tabla.varchar1);
+                                    break;
+                                case "varchar2":
+                                    pedido.varchar2 = (tabla.varchar2);
+                                    break;
+                                case "varchar3":
+                                    pedido.varchar3 = (tabla.varchar3);
+                                    break;
+                                case "dateTime1":
+                                    pedido.dateTime1 = (tabla.dateTime1);
+                                    break;
+                                case "dateTime2":
+                                    pedido.dateTime2 = (tabla.dateTime2);
+                                    break;
+                                case "dateTime3":
+                                    pedido.dateTime3 = (tabla.dateTime3);
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
+                        tabla_solicitada.Add(i, pedido);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < Resultado.Count(); i++)
+                    {
+                        
+                        if (Resultado[i].id != null)
+                        {
+                            pedido.id = Resultado[i].id;
+                        }
+                        if (Resultado[i].int1 != null)
+                        {
+                            pedido.int1 = Resultado[i].int1;
+                        }
+                        if (Resultado[i].int2 != null)
+                        {
+                            pedido.int2 = Resultado[i].int2;
+                        }
+                        if (Resultado[i].int3 != null)
+                        {
+                            pedido.int3 = Resultado[i].int3;
+                        }
+                        if (Resultado[i].varchar1 != null)
+                        {
+                            pedido.varchar1 = Resultado[i].varchar1;
+                        }
+                        if (Resultado[i].varchar2 != null)
+                        {
+                            pedido.varchar2 = Resultado[i].varchar2;
+                        }
+                        if (Resultado[i].varchar3 != null)
+                        {
+                            pedido.varchar3 = Resultado[i].varchar3;
+                        }
+                        if (Resultado[i].dateTime1 != null)
+                        {
+                            pedido.dateTime1 = Resultado[i].dateTime1;
+                        }
+                        if (Resultado[i].dateTime2 != null)
+                        {
+                            pedido.dateTime2 = Resultado[i].dateTime2;
+                        }
+                        if (Resultado[i].varchar3 != null)
+                        {
+                            pedido.dateTime3 = Resultado[i].varchar3;
+                        }
+                        tabla_solicitada.Add(i, pedido);
                     }
                 }
                //mostrar solicitado 
@@ -525,7 +599,7 @@ namespace Proyecto_ED1_v1.Models
             dicionarioVariables = DiccionarioVariables[nombreTabla];
             List<string> listaVaribles = new List<string>();
             string tipoVariable;
-            for (int i = 0; i < variables.Count()-1; i++)
+            for (int i = 0; i < variables.Count(); i++)
             {
                 tipoVariable = Variables[variables[i]];
                 listaVaribles.Add(tipoVariable);
@@ -575,6 +649,7 @@ namespace Proyecto_ED1_v1.Models
             Arboles.Add(nombreTabla, arbolInsertar);
             int posicion = posicionTabla[nombreTabla];
             arraytablas[posicion] = listaAgregar;
+            
         }
 
     }
