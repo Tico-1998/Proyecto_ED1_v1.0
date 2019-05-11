@@ -14,7 +14,7 @@ namespace Proyecto_ED1_v1.Controllers
     {
         public ActionResult Index()
         {
-            //Al inicialisar tienes que crear el pBDS como te lo tengo de ejemplo usando tus lista para que se pueda mostrar en la vista.
+            
             List<BaseDatos> pBDS = new List<BaseDatos>();
 
             pBDS.Add(new BaseDatos { Nombre = "Base1", Tables = new List<Tablas>() });
@@ -22,6 +22,7 @@ namespace Proyecto_ED1_v1.Controllers
             pBDS.Add(new BaseDatos { Nombre = "Base3", Tables = new List<Tablas>() });
             pBDS.Add(new BaseDatos { Nombre = "Base4", Tables = new List<Tablas>() });
             pBDS.Add(new BaseDatos { Nombre = "Base5", Tables = new List<Tablas>() });
+
 
 
             List<Tablas> tablasBD1 = new List<Tablas>();
@@ -40,7 +41,7 @@ namespace Proyecto_ED1_v1.Controllers
 
             pBDS[0].Tables = tablasBD1;
 
-            // Cargar el resultado del Grid Aqui VA VACIO YA QUE ES CUANDO INICIA PAGINA
+            
 
             List<ResultadoGrid> lstResultado = new List<ResultadoGrid>();
             List<ColumnasResult> Columnas = new List<ColumnasResult>();
@@ -48,7 +49,7 @@ namespace Proyecto_ED1_v1.Controllers
 
             lstResultado.Add(new ResultadoGrid { Columnas = Columnas, Resultado = Resultado });
 
-            //pBDS ES EL ARBOL PARA LLENAR EL GRID DE LAS BD Y TABLAS lstResutado debe ser un clase con una lista columnas y lista resultados para llenar el grid.
+            
             ModelParams md = new ModelParams { BDS = pBDS, Resultado = lstResultado };
 
             return View(md);
@@ -57,8 +58,8 @@ namespace Proyecto_ED1_v1.Controllers
         [HttpPost]
         public ActionResult Index(string[] textAreaSQL)
         {
-            // en textAreaSQL viene en forma de array lo que escribas dentro del text area y a partir de ahi tienes que desarrollar tus metodos
-            // para poder llenar pBDS que serian las bd yo utilize listas pero debes usar lo que necesites
+            LecturaDatosController.Leer(textAreaSQL);
+            
             List<BaseDatos> pBDS = new List<BaseDatos>();
 
             pBDS.Add(new BaseDatos { Nombre = "Base1", Tables = new List<Tablas>() });
@@ -85,9 +86,7 @@ namespace Proyecto_ED1_v1.Controllers
 
             pBDS[0].Tables = tablasBD1;
 
-            //Cargar el resultado del Grid Aqui
-            // En esta parte tenes que crear el datatable como viene a continuacion con las columnas y los datos de las columnas despues eso 
-            // va a hacer que en la vista se vean los resultados
+            
             List<ResultadoGrid> lstResultado = new List<ResultadoGrid>();
 
             List<ColumnasResult> Columnas = new List<ColumnasResult>();
@@ -105,7 +104,8 @@ namespace Proyecto_ED1_v1.Controllers
 
             DataRow DR = Resultado.NewRow();
 
-            DR["Col1"] = Tabla.Solicitado[0];
+
+            DR["Col1"] = "1";
             DR["Col2"] = "2";
             DR["Col3"] = "TEST3";
 
@@ -114,7 +114,7 @@ namespace Proyecto_ED1_v1.Controllers
             lstResultado.Add(new ResultadoGrid { Columnas = Columnas, Resultado = Resultado });
 
 
-            //pBDS ES EL ARBOL PARA LLENAR EL GRID DE LAS BD Y TABLAS lstResutado debe ser un clase con una lista columnas y lista resultados para llenar el grid.
+            
             ModelParams md = new ModelParams { BDS = pBDS, Resultado = lstResultado };
 
 
