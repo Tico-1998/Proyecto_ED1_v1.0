@@ -28,47 +28,53 @@ namespace Proyecto_ED1_v1.Controllers
             //guardar texto en variable 
 
             //contar lineas
-            String fileName=Path.GetFullPath("Palabras_Reservadas.txt");
+            String fileName=Path.GetFullPath("Palabra_Reservadas.txt");
             Sintaxis.LeerArchivo(fileName);
 
             for (int i = 0; i < textoIngresado.Length; i++)
             {
                 Lectura.Add(textoIngresado[i]);
             }
-            char caracter = Convert.ToChar('\r');
-            int cantidadLectura = Lectura.Count() - 1;
-            lectura = Lectura[cantidadLectura].Split(caracter);
-            caracter = '\n';
-            for (int i = 0; i < lectura.Length; i++)
+            if (textoIngresado.Length<=12)
             {
-                lectura[i] = lectura[i].TrimEnd(caracter);
-                lectura[i] = lectura[i].TrimStart(caracter);
-            }
-             
-                int contadorLineas = textoIngresado.Length;
-                if (lectura[0]==Sintaxis.CreateTable)
+                char caracter = Convert.ToChar('\r');
+                int cantidadLectura = Lectura.Count() - 1;
+                lectura = Lectura[cantidadLectura].Split(caracter);
+                caracter = '\n';
+                for (int i = 0; i < lectura.Length; i++)
                 {
-                    int cantidadLineas = lectura.Count()-1;
+                    lectura[i] = lectura[i].TrimEnd(caracter);
+                    lectura[i] = lectura[i].TrimStart(caracter);
+                }
+
+                int contadorLineas = textoIngresado.Length;
+                if (lectura[0] == Sintaxis.CreateTable)
+                {
+                    int cantidadLineas = lectura.Count() - 1;
                     CreateTableEnter(cantidadLineas);
                 }
-                else if (lectura[0]==Sintaxis.DropTable)
+                else if (lectura[0] == Sintaxis.DropTable)
                 {
                     DropTableEnter();
                 }
-                else if (lectura[0]==Sintaxis.Delete)
+                else if (lectura[0] == Sintaxis.Delete)
                 {
                     DeleteEnter();
                 }
-                else if (lectura[0]==Sintaxis.Select)
+                else if (lectura[0] == Sintaxis.Select)
                 {
                     SelectEnter();
                 }
-                else if (lectura[0]==Sintaxis.InsertInto)
+                else if (lectura[0] == Sintaxis.InsertInto)
                 {
                     InsertIntoEnter();
-                }                
-            
-        }//crear else de textoIngresado sin /n
+                }
+            }
+            else
+            {
+                //crear else de textoIngresado sin /n
+            }
+        }
         #region Create table
         static public void CreateTableEnter(int contadorLineas)
         {
