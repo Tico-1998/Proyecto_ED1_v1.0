@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Proyecto_ED1_v1.Models;
+using System.IO;
+using Excel = Microsoft.Office.Interop.Excel;
 
 
 namespace Proyecto_ED1_v1.Models
@@ -10,7 +12,9 @@ namespace Proyecto_ED1_v1.Models
     //public delegate int compareTo<T>(T Tabla, T Valor);
     public class Tabla
     {
+        public static Excel.Application ArchivoExcel = new Excel.Application();
         public static List<Tabla> Solicitado = new List<Tabla>();
+        public static Dictionary<string, int> diccionarioNumeroTabla = new Dictionary<string, int>();
         public static ArbolB<Tabla> Arbol = new ArbolB<Tabla>();
         public static Dictionary<string, int> posicionTabla = new Dictionary<string, int>();
         public static Dictionary<string, ArbolB<Tabla>> Arboles = new Dictionary<string, ArbolB<Tabla>>();
@@ -21,6 +25,7 @@ namespace Proyecto_ED1_v1.Models
         public static Dictionary<string, string> Variables = new Dictionary<string, string>();//la llave es el nombre de la variable, el valor es cual variable es 
         public static Dictionary<string, Dictionary<string,string>> DiccionarioVariables= new Dictionary<string,Dictionary<string,string>>();
         public static int cantidadTablas = 0;
+        public static int numeroTabla = 0;
         public string id;        
         public string int1;
         public string int2;
@@ -32,7 +37,7 @@ namespace Proyecto_ED1_v1.Models
         public string dateTime2;
         public string dateTime3;
         public string nombre;
-        
+
         public static void CrearTabla(Tabla tabla, string nombre)
         {
 
@@ -50,7 +55,7 @@ namespace Proyecto_ED1_v1.Models
             tabla.nombre = nombre;
             DiccionarioVariables.Add(nombre, Variables);
             List<Tabla> Tabla = new List<Tabla>();
-            Tabla.Add(tabla);            
+            Tabla.Add(tabla);
             DiccionarioTabla.Add(nombre, Tabla);
             Arboles.Add(nombre, Arbol);
             if (cantidadTablas > 5)
@@ -81,8 +86,43 @@ namespace Proyecto_ED1_v1.Models
             posicionTabla.Add(nombre, cantidadTablas);
             cantidadTablas++;
             Arbol.Orden = 5;
+            //creacion txt
+            string nombre_archivo = "Tabla"+numeroTabla+".txt";
+            string pathfinal = nombre_archivo;
+            using (StreamWriter outputFile = new StreamWriter(pathfinal))
+            {
+                outputFile.Write(tabla.nombre +", "+ tabla.id +", "+ tabla.int1 +", "+ tabla.int2 +", "+ tabla.int3+", ");
+                outputFile.Write(tabla.varchar1 +", "+ tabla.varchar2 +", "+ tabla.varchar3 +", "+ tabla.dateTime1+", " +
+                    "");
+                outputFile.Write(tabla.dateTime2 +", "+ tabla.dateTime3);                
+            }
+            diccionarioNumeroTabla.Add(nombre, numeroTabla);
+            //creacion Excel         
             
+            Object opc = Type.Missing;
+            Excel.Workbook libro;
+            libro = ArchivoExcel.Workbooks.Add(opc);
+            ArchivoExcel.Visible = false;
+            libro = ArchivoExcel.Workbooks.Add(opc);
+            Excel.Worksheet hoja = new Excel.Worksheet();
+            hoja = (Excel.Worksheet)libro.Sheets.Add(opc, opc, opc, opc);
+            hoja.Activate();
+            hoja.Cells[1, 1] = tabla.nombre;
+            hoja.Cells[1, 2] = tabla.id;
+            hoja.Cells[1, 3] = tabla.int1;
+            hoja.Cells[1, 4] = tabla.int2;
+            hoja.Cells[1, 5] = tabla.int3;
+            hoja.Cells[1, 6] = tabla.varchar1;
+            hoja.Cells[1, 7] = tabla.varchar2;
+            hoja.Cells[1, 8] = tabla.varchar3;
+            hoja.Cells[1, 9] = tabla.dateTime1;
+            hoja.Cells[1, 10] = tabla.dateTime2;
+            hoja.Cells[1, 11] = tabla.dateTime3;
+            ArchivoExcel.Visible = true;
+            libro.SaveAs("Excel" + numeroTabla);
+            numeroTabla++;
         }
+        //eliminar archivo preguntar
         public static void ElimiarTabla(string Clave)
         {
             DiccionarioTabla.Remove(Clave);
@@ -91,7 +131,17 @@ namespace Proyecto_ED1_v1.Models
             arraytablas[posicion] = null;
             nombretablas[posicion] = null;
             cantidadTablas--;
+            int tablaNumero = diccionarioNumeroTabla[Clave];
+            string nombre = "Tabla" + tablaNumero + ".txt";
+            File.Delete(nombre);
+            string Ruta = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            int numeroArchivo = diccionarioNumeroTabla[Clave];
+            string nombreArchivo = "Excel" + numeroArchivo+".xlsx";
+            string path = Ruta + "\\" + nombreArchivo;
+            File.SetAttributes(path, FileAttributes.Normal);
+            File.Delete(path);
         }
+       
         public static void EliminarElemento(string Llave, string variable, string nombre)
         {
             ArbolBNodo<Tabla> Raiz = new ArbolBNodo<Tabla>();
@@ -275,8 +325,49 @@ namespace Proyecto_ED1_v1.Models
             Arboles.Add(Llave, Eliminar);
             int posicion = posicionTabla[Llave];
             arraytablas[posicion] = eliminando;
-            
+            int tablaNumero = diccionarioNumeroTabla[Llave];
+            string nombre_archivo = "Tabla" + tablaNumero + ".txt";
+            string pathfinal = nombre_archivo;
+            using (StreamWriter outputFile = new StreamWriter(pathfinal))
+            {
+                for (int i = 0; i < eliminando.Count(); i++)
+                {
+                    tabla = eliminando[i];
+                    outputFile.Write(tabla.nombre + ", " + tabla.id + ", " + tabla.int1 + ", " + tabla.int2 + ", " + tabla.int3 + ", ");
+                    outputFile.Write(tabla.varchar1 + ", " + tabla.varchar2 + ", " + tabla.varchar3 + ", " + tabla.dateTime1 + ", ");
+                    outputFile.Write(tabla.dateTime2 + ", " + tabla.dateTime3);
+                    outputFile.WriteLine("");
+                }
+            }
+            Object opc = Type.Missing;
+            Excel.Workbook libro;
+            libro = ArchivoExcel.Workbooks.Add(opc);
+            ArchivoExcel.Visible = false;
+            libro = ArchivoExcel.Workbooks.Add(opc);
+            Excel.Worksheet hoja = new Excel.Worksheet();
+            hoja = (Excel.Worksheet)libro.Sheets.Add(opc, opc, opc, opc);
+            hoja.Activate();
+            int cantidadLineas = eliminando.Count();
+            for (int i = 0; i < cantidadLineas; i++)
+            {
+                tabla = eliminando[i];
+                hoja.Cells[i + 1, 1] = tabla.nombre;
+                hoja.Cells[i + 1, 2] = tabla.id;
+                hoja.Cells[i + 1, 3] = tabla.int1;
+                hoja.Cells[i + 1, 4] = tabla.int2;
+                hoja.Cells[i + 1, 5] = tabla.int3;
+                hoja.Cells[i + 1, 6] = tabla.varchar1;
+                hoja.Cells[i + 1, 7] = tabla.varchar2;
+                hoja.Cells[i + 1, 8] = tabla.varchar3;
+                hoja.Cells[i + 1, 9] = tabla.dateTime1;
+                hoja.Cells[i + 1, 10] = tabla.dateTime2;
+                hoja.Cells[i + 1, 11] = tabla.dateTime3;
+            }
+            ArchivoExcel.Visible = true;
+            libro.SaveAs("Excel" + tablaNumero);
+
         }
+        
         public static void Buscar(List<string> variables, string nombreTabla, string Posicion, string Valor)
         {
             Dictionary<int, Tabla> tabla_solicitada = new Dictionary<int, Tabla>();
@@ -593,6 +684,7 @@ namespace Proyecto_ED1_v1.Models
                //mostrar solicitado 
             }
         }
+        
         public static void Insertar(List<string>variables,string nombreTabla, List<string>valores)
         {
             ArbolB<Tabla> arbolInsertar = new ArbolB<Tabla>();
@@ -642,6 +734,7 @@ namespace Proyecto_ED1_v1.Models
                         break;
                 }
             }
+
             listaAgregar = DiccionarioTabla[nombreTabla];
             DiccionarioTabla.Remove(nombreTabla);
             listaAgregar.Add(tabla);
@@ -652,8 +745,47 @@ namespace Proyecto_ED1_v1.Models
             Arboles.Add(nombreTabla, arbolInsertar);
             int posicion = posicionTabla[nombreTabla];
             arraytablas[posicion] = listaAgregar;
-            
-        }
+            int tablaNumero = diccionarioNumeroTabla[nombreTabla];
+            string nombre_archivo = "Tabla" + tablaNumero + ".txt";
+            string pathfinal = nombre_archivo;
+            using (StreamWriter outputFile = new StreamWriter(pathfinal))
+            {
+                for (int i = 0; i < listaAgregar.Count(); i++)
+                {
+                    tabla = listaAgregar[i];
+                    outputFile.Write(tabla.nombre + ", " + tabla.id + ", " + tabla.int1 + ", " + tabla.int2 + ", " + tabla.int3 + ", ");
+                    outputFile.Write(tabla.varchar1 + ", " + tabla.varchar2 + ", " + tabla.varchar3 + ", " + tabla.dateTime1 + ", ");
+                    outputFile.Write(tabla.dateTime2 + ", " + tabla.dateTime3);
+                    outputFile.WriteLine("");
+                }               
+            }
 
+            Object opc = Type.Missing;
+            Excel.Workbook libro;
+            libro = ArchivoExcel.Workbooks.Add(opc);
+            ArchivoExcel.Visible = false;
+            libro = ArchivoExcel.Workbooks.Add(opc);
+            Excel.Worksheet hoja = new Excel.Worksheet();
+            hoja = (Excel.Worksheet)libro.Sheets.Add(opc, opc, opc, opc);
+            hoja.Activate();
+            int cantidadLineas = listaAgregar.Count();
+            for (int i = 0; i < cantidadLineas; i++)
+            {
+                tabla = listaAgregar[i];
+                hoja.Cells[i+1, 1] = tabla.nombre;
+                hoja.Cells[i+1, 2] = tabla.id;
+                hoja.Cells[i+1, 3] = tabla.int1;
+                hoja.Cells[i+1, 4] = tabla.int2;
+                hoja.Cells[i+1, 5] = tabla.int3;
+                hoja.Cells[i+1, 6] = tabla.varchar1;
+                hoja.Cells[i+1, 7] = tabla.varchar2;
+                hoja.Cells[i+1, 8] = tabla.varchar3;
+                hoja.Cells[i+1, 9] = tabla.dateTime1;
+                hoja.Cells[i+1, 10] = tabla.dateTime2;
+                hoja.Cells[i+1, 11] = tabla.dateTime3;
+            }
+            ArchivoExcel.Visible = true;
+            libro.SaveAs("Excel" + tablaNumero);            
+        }
     }
 }

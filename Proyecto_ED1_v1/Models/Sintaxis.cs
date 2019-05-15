@@ -83,6 +83,7 @@ namespace Proyecto_ED1_v1.Models
                             }
                         }
                         numeroLinea++;
+                        Linea = stream_reader.ReadLine();
                     }
                 }
             }
