@@ -43,8 +43,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArbolB.cs" />
+    <Compile Include="BPTree.cs" />
+    <Compile Include="Builder.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="DebugView.cs" />
+    <Compile Include="InternalNode.cs" />
+    <Compile Include="LeafNode.cs" />
+    <Compile Include="Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="_Impl.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

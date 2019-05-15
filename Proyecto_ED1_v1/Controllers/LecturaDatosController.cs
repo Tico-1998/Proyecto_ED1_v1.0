@@ -6,66 +6,89 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using Proyecto_ED1_v1.Models;
 
+
 namespace Proyecto_ED1_v1.Controllers
 {
     public class LecturaDatosController : Controller
     {
-        Tabla tabla = new Tabla();
-        public IActionResult Index()
+        [HttpGet]
+        public ActionResult MostrarResultadosBusqueda()
         {
-
-            return View();
+            return View();//agregar lista solicitado Tabla.Buscar.Solicitado);
         }
+
+        public static string[] lectura;
+        static Tabla tabla = new Tabla();
         public static List<string> Lectura = new List<string>();
-        public void Leer()
+        public static string texto { get; set; }
+
+        public static void Leer(string[] textoIngresado)
         {
             //leer texto 
             //guardar texto en variable 
-            string textoIngresado = "";
+
             //contar lineas
+            String fileName=Path.GetFullPath("Palabra_Reservadas.txt");
+            Sintaxis.LeerArchivo(fileName);
 
-           
-            if (textoIngresado.Contains('\n'))
+            for (int i = 0; i < textoIngresado.Length; i++)
             {
-                string[] Introducir;
-                Introducir = textoIngresado.Split('\n');
-                for (int i = 0; i < Introducir.Length; i++)
+                Lectura.Add(textoIngresado[i]);
+            }
+            if (textoIngresado.Length<=12)
+            {
+                char caracter = Convert.ToChar('\r');
+                int cantidadLectura = Lectura.Count() - 1;
+                lectura = Lectura[cantidadLectura].Split(caracter);
+                caracter = '\n';
+                for (int i = 0; i < lectura.Length; i++)
                 {
-                    Lectura.Add(Introducir[i]);
-                }
-                int contadorLineas = Introducir.Length;
-                switch (Lectura[0])
-                {
-                    case "CREATE TABLE":
-                        break;
-                    case "DROP TABLE":
-                        break;
-                    case "DELETE":
-                        break;
-                    case "SELECT":
-                        break;
-                    case "INSERT INTO":
-                        break;
-                    default:
-                        break;
+                    lectura[i] = lectura[i].TrimEnd(caracter);
+                    lectura[i] = lectura[i].TrimStart(caracter);
                 }
 
+                int contadorLineas = textoIngresado.Length;
+                if (lectura[0] == Sintaxis.CreateTable)
+                {
+                    int cantidadLineas = lectura.Count() - 1;
+                    CreateTableEnter(cantidadLineas);
+                }
+                else if (lectura[0] == Sintaxis.DropTable)
+                {
+                    DropTableEnter();
+                }
+                else if (lectura[0] == Sintaxis.Delete)
+                {
+                    DeleteEnter();
+                }
+                else if (lectura[0] == Sintaxis.Select)
+                {
+                    SelectEnter();
+                }
+                else if (lectura[0] == Sintaxis.InsertInto)
+                {
+                    InsertIntoEnter();
+                }
+            }
+            else
+            {
+                //crear else de textoIngresado sin /n
             }
         }
         #region Create table
-        public void CreateTableEnter(int contadorLineas)
+        static public void CreateTableEnter(int contadorLineas)
         {
             int contador = 3;
             int contadorInt = 0;
             int ContadorVarChar = 0;
             int ContadorDateTime = 0;
-            string Llave = Lectura[1];
-            while (contador<contadorLineas-1)
+            string Llave = lectura[1];
+            while (contador<contadorLineas)
             {
                 string[] separador;
-                separador = Lectura[contador].Split(' ');
+                separador = lectura[contador].Split(' ');
                 int contadorID = 0;
-                if (separador[0]=="ID"&&contadorID<1)
+                if (separador[0]=="ID"&&contadorID<1||separador[0]=="Id"&&contadorID<1||separador[0]=="id"&&contadorID<1)
                 {
                     tabla.id = separador[0];
                     contadorID++;
@@ -236,15 +259,17 @@ namespace Proyecto_ED1_v1.Controllers
                     }
                 }
             }
+            tabla.nombre = Llave;
             Tabla.CrearTabla(tabla, Llave);
 
         }
         #endregion
 
         #region Drop table
-        public void DropTableEnter()
+        static public void DropTableEnter()
         {
-            string Llave = Lectura[1];
+            string Llave = lectura[1];
+            Llave = Llave.Trim();
             Tabla.ElimiarTabla(Llave);
         }
 
@@ -259,13 +284,17 @@ namespace Proyecto_ED1_v1.Controllers
         #endregion
 
         #region Delete
-        public void DeleteEnter()
+        static public void DeleteEnter()
         {
-            string Llave = Lectura[1];
+            string Llave = lectura[1];
             string[] Separado;
-            Separado = Lectura[4].Split(' ');
+            Separado = lectura[3].Split('=');
+            for (int i = 0; i < Separado.Count(); i++)
+            {
+                Separado[i] = Separado[i].Trim();
+            }
             string variable = Separado[0];
-            string valor = Separado[2];
+            string valor = Separado[1];
             Tabla.EliminarElemento(Llave, variable, valor);
         }
 
@@ -282,17 +311,17 @@ namespace Proyecto_ED1_v1.Controllers
         #endregion
 
         #region Select
-        public void SelectEnter()
+        static public void SelectEnter()
         {
             string AuxiliarVariable;//esta variable ayuda a elimar las , de los string para guardarlos en la lista
             List<string> Variable = new List<string>();
             int contadorVariables = 1;
-            if (Lectura[1]!="*")
+            if (lectura[1]!="*")
             {
                 
-                while (Lectura[contadorVariables]!="FROM"||Lectura[contadorVariables]!="From"||Lectura[contadorVariables]!="from")
+                while ((lectura[contadorVariables]!=Sintaxis.From))
                 {
-                    AuxiliarVariable = Lectura[contadorVariables].TrimEnd(',');
+                    AuxiliarVariable = lectura[contadorVariables].TrimEnd(',');
                     Variable.Add(AuxiliarVariable);
                     contadorVariables++;
                 }
@@ -301,20 +330,23 @@ namespace Proyecto_ED1_v1.Controllers
             else
             {
                 Variable.Add("*");
+                contadorVariables++;
             }
             contadorVariables++;
-            string nombreTabla = Lectura[contadorVariables];
+            string nombreTabla = lectura[contadorVariables];
+            nombreTabla = nombreTabla.Trim();
             string Posicion="";
             string valor="";
-            if (Lectura[contadorVariables + 1] != null)
+            int cantidad_lectura = lectura.Count()-1;
+            if (cantidad_lectura>contadorVariables+1)
             {
                 contadorVariables += 2;
-                if (Lectura[contadorVariables] != null)
+                if (lectura[contadorVariables] != null)
                 {
                     string[] Separado;
-                    Separado = Lectura[contadorVariables].Split(' ');
-                    Posicion = Separado[0];
-                    valor = Separado[2];
+                    Separado = lectura[contadorVariables].Split('=');
+                    Posicion = Separado[0].Trim();
+                    valor = Separado[1].Trim();
                 }
             }
             Tabla.Buscar(Variable, nombreTabla, Posicion, valor);
@@ -325,6 +357,35 @@ namespace Proyecto_ED1_v1.Controllers
             //hacer metodo para leer en una linea 
         }
 
+        #endregion
+
+        #region Insert Into
+        public static void InsertIntoEnter()
+        {
+            List<string> variables = new List<string>();
+            List<string> valores = new List<string>();
+            string Llave = lectura[1];
+            int posicin = 3;
+            int cantidadVaribles = 0;
+            while (lectura[posicin]!=")")
+            {
+                lectura[posicin] = lectura[posicin].TrimEnd(',');
+                variables.Add(lectura[posicin]);
+                posicin++;
+                cantidadVaribles++;
+            }
+            if (lectura[posicin+1]==Sintaxis.Values)
+            {
+                posicin += 3;
+                for (int i = 0; i < cantidadVaribles; i++)
+                {
+                    lectura[posicin] = lectura[posicin].TrimEnd(',');
+                    valores.Add(lectura[posicin]);
+                    posicin++;
+                }
+            }
+            Tabla.Insertar(variables,Llave,valores);
+        }
         #endregion
     }
 }

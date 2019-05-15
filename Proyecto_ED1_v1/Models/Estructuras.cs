@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+using System.Web;
 
-namespace Estructuras
+namespace ProyectoED1V2.Models
 {
+    public class Estructuras
+    {
+    }
 
     public delegate int compareTo<T>(T valor, T valor2);
-    #region arboles
-
-    #endregion
 
     public class ArbolBNodo<T>
     {
@@ -26,7 +24,7 @@ namespace Estructuras
         public int Cuenta { get; set; }
     }//Fin clase nodo arbol B
 
-    public class ArbolB<T>
+    class ArbolB<T>
     {
         #region variables
         //variables
@@ -41,7 +39,7 @@ namespace Estructuras
 
         #region constructores
         //Constructores
-        public ArbolB(int Orden,compareTo<T> Compare)
+        public ArbolB(int Orden, compareTo<T> Compare)
         {
             this.Orden = Orden;
             Minimo = (Orden - 1) / 2;
@@ -60,9 +58,9 @@ namespace Estructuras
         #region Busqueda
         //Busqueda
         public static bool arbolVacio(ArbolBNodo<T> nodo) => nodo == null;
-        private void BuscarNodo(T clave, ArbolBNodo<T> P,ref bool Encontadro, ref int K)
+        private void BuscarNodo(T clave, ArbolBNodo<T> P, ref bool Encontadro, ref int K)
         {
-            if(Comparador(clave,P.Valores[1])==-1)
+            if (Comparador(clave, P.Valores[1]) == -1)
             {
                 Encontadro = false;
                 K = 0;//rama por donde continua
@@ -71,14 +69,14 @@ namespace Estructuras
             {
                 //revisa los valores del nodo
                 K = P.Cuenta;
-                while (Comparador(clave,P.Valores[K])==-1&&K>1)
+                while (Comparador(clave, P.Valores[K]) == -1 && K > 1)
                 {
                     K--;
                     Encontadro = (Comparador(clave, P.Valores[K]) == 0);
                 }
             }
         }//Fin metodo BuscarNodo
-        public void Buscar(T clave, ArbolBNodo<T> Raiz, ref bool encontrado, ref ArbolBNodo<T> N,ref int posicion)
+        public void Buscar(T clave, ArbolBNodo<T> Raiz, ref bool encontrado, ref ArbolBNodo<T> N, ref int posicion)
         {
             if (arbolVacio(Raiz))
             {
@@ -108,9 +106,9 @@ namespace Estructuras
         ///parametro "XDireccion" direccion del nodo
         ///parametro "P" Nodo sucesor
         ///parametro "K" Posicion donde se va a insertar
-        private void MeterHoja(T x,ArbolBNodo<T> XDireccion, ArbolBNodo<T> P, int K)
+        private void MeterHoja(T x, ArbolBNodo<T> XDireccion, ArbolBNodo<T> P, int K)
         {
-            for (int i = P.Cuenta; i >= K+1 ; i--)
+            for (int i = P.Cuenta; i >= K + 1; i--)
             {
                 P.Valores[i + 1] = P.Valores[i];
                 P.Hijo[i + 1] = P.Hijo[i];
@@ -126,12 +124,12 @@ namespace Estructuras
         ///parametro "K" posicion donde debe insertarse la nueva clave
         ///parametro "Media" clave que sube como nuevo padre de los nodos creados 
         ///parametro "Derecha" nuevo nodo donde van los valores mayores a la media 
-        private void DividirNodo(T X, ArbolBNodo<T> XDireccion, ArbolBNodo<T> P,int K, ref T Media, ref ArbolBNodo<T> Derecha)
+        private void DividirNodo(T X, ArbolBNodo<T> XDireccion, ArbolBNodo<T> P, int K, ref T Media, ref ArbolBNodo<T> Derecha)
         {
             int posicionMedia;//la posicion media del nodo
             posicionMedia = K <= Minimo ? Minimo : Minimo + 1;//if corto
             Derecha = new ArbolBNodo<T>();//nuevo nodo
-            for (int i = posicionMedia+1; i < Orden; i++)
+            for (int i = posicionMedia + 1; i < Orden; i++)
             {
                 Derecha.Valores[i - posicionMedia] = P.Valores[i];//es desplazada la mitad derecha del nodo nuevo, la clave media se queda en laizquierda
                 Derecha.Hijo[i - posicionMedia] = P.Hijo[i];
@@ -139,7 +137,7 @@ namespace Estructuras
             Derecha.Cuenta = maximo - posicionMedia;//claves en el nuevo nodo
             P.Cuenta = posicionMedia;//claves que se quedan en el nodo original 
             //Inserccion de X y la rama derecha
-            if (K <= Orden/2)
+            if (K <= Orden / 2)
             {
                 MeterHoja(X, XDireccion, P, K);//insertar nodo a la izquierda
             }
@@ -160,7 +158,7 @@ namespace Estructuras
         ///parametro "empujarArriba" bandera que indica si el nodo se divide o no
         ///parametro "Media" valor medio para la division del nodo 
         ///parametro "Auxiliar" nodo nuevo en cado se necesitarlo se crea para repartir las llaves
-        private void Empujar (T Clave, ArbolBNodo<T> Evaluando, ref bool empujarArriba,ref T Media, ref ArbolBNodo<T>Auxiliar)
+        private void Empujar(T Clave, ArbolBNodo<T> Evaluando, ref bool empujarArriba, ref T Media, ref ArbolBNodo<T> Auxiliar)
         {
             var k = default(int);
             var esta = default(bool);//controla si ya ha sido insertado el valor 
@@ -180,7 +178,7 @@ namespace Estructuras
                 Empujar(Clave, Evaluando.Hijo[k], ref empujarArriba, ref Media, ref Auxiliar);
                 if (empujarArriba)
                 {
-                    if (Evaluando.Cuenta<maximo)//no esta lleno el nodo
+                    if (Evaluando.Cuenta < maximo)//no esta lleno el nodo
                     {
                         empujarArriba = false;//termina el proceso de busqueda
                         MeterHoja(Media, Auxiliar, Evaluando, k);//se inserta la clave
@@ -207,7 +205,7 @@ namespace Estructuras
             Empujar(clave, raiz, ref empujarArriba, ref X, ref Auxiliar);
 
             if (empujarArriba)//si la division de nodos llega hasta la raiz, se crea un nuevo nodo y se cambia la raiz
-            {                
+            {
                 var P = new ArbolBNodo<T>();
                 P.Cuenta = 1;
                 P.Valores[1] = X;
@@ -249,27 +247,9 @@ namespace Estructuras
         {
             Lista = new Lazy<List<T>>();
             Inorder(Raiz);
-            Archivo(Lista);
             return Lista.Value;
         }
         //Fin recorrido
-        #endregion
-    
-        #region archivo
-        private void Archivo(Lazy<List<T>> Lista)
-        {
-            string nombre = System.IO.Path.GetRandomFileName();
-            string path = Convert.ToString((Environment.SpecialFolder.Desktop));
-            string pathfinal = System.IO.Path.Combine(path, nombre);
-            using (StreamWriter outputFile = new StreamWriter(pathfinal))
-            {
-                for (int i = 0; i < Lista.Value.Count()-1; i++)
-                {
-                    outputFile.WriteLine(Lista.Value[i]);
-                }
-            }
-        }
-
         #endregion
 
         #region Eliminacion
@@ -281,7 +261,7 @@ namespace Estructuras
         /// </summary>
         /// <param name="P"></param>
         /// <param name="K"></param>
-        private void Combina(ArbolBNodo<T>P, int K)
+        private void Combina(ArbolBNodo<T> P, int K)
         {
             int J;
             ArbolBNodo<T> Q;
@@ -297,7 +277,7 @@ namespace Estructuras
                 P.Hijo[K - 1].Valores[P.Hijo[K - 1].Cuenta] = Q.Valores[J];
                 P.Hijo[K - 1].Hijo[P.Hijo[K - 1].Cuenta] = Q.Hijo[J];
             }
-            for (J = K; J <= P.Cuenta-1; J++)
+            for (J = K; J <= P.Cuenta - 1; J++)
             {
                 P.Valores[J] = P.Valores[J + 1];
                 P.Hijo[J] = P.Hijo[J + 1];
@@ -358,11 +338,11 @@ namespace Estructuras
         /// </summary>
         /// <param name="P"></param> tiene la direccion del nodo antecesor del nodo P.Hijo[K] que se ha quedado con menos claves que el minimo 
         /// <param name="K"></param>
-        private void Restablecer(ArbolBNodo<T> P,int K)
+        private void Restablecer(ArbolBNodo<T> P, int K)
         {
             if (K > 0)//tiene hermano izquiero
             {
-                if (P.Hijo[K - 1].Cuenta>Minimo)//tiene mas claves que el minimo y por lo tanto puede desplazarse una clave  
+                if (P.Hijo[K - 1].Cuenta > Minimo)//tiene mas claves que el minimo y por lo tanto puede desplazarse una clave  
                 {
                     MoverDerecha(P, K);
                 }
@@ -373,7 +353,7 @@ namespace Estructuras
             }
             else//solo tiene hermano derecho 
             {
-                if (P.Hijo[1].Cuenta>Minimo)//tiene mas claves que el minimo
+                if (P.Hijo[1].Cuenta > Minimo)//tiene mas claves que el minimo
                 {
                     MoverIzquierda(P, 1);
                 }
@@ -392,7 +372,7 @@ namespace Estructuras
         {
             ArbolBNodo<T> Q;
             Q = P.Hijo[K];
-            while (Q.Hijo[0]!=null)
+            while (Q.Hijo[0] != null)
             {
                 Q = Q.Hijo[0];
                 P.Valores[K] = Q.Valores[1];
@@ -403,9 +383,9 @@ namespace Estructuras
         /// </summary>
         /// <param name="P"></param>Direccion del nodo 
         /// <param name="K"></param>Posicion de la clave del nodo 
-        private void Quitar(ArbolBNodo<T>P,int K)
+        private void Quitar(ArbolBNodo<T> P, int K)
         {
-            for (int j = K+1; j <= P.Cuenta; j++)
+            for (int j = K + 1; j <= P.Cuenta; j++)
             {
                 P.Valores[j - 1] = P.Valores[j];//desplaza uan posicion a la izquierda, con la que elimina la referencia a la clave
                 P.Hijo[j - 1] = P.Hijo[j];
@@ -432,7 +412,7 @@ namespace Estructuras
                 BuscarNodo(Clave, Raiz, ref Encontrado, ref k);
                 if (Encontrado)
                 {
-                    if (Raiz.Hijo[k-1]==null)//Las ramas estan indexadas desde el indice 0 a Maximo, por lo que este nodo es hoja
+                    if (Raiz.Hijo[k - 1] == null)//Las ramas estan indexadas desde el indice 0 a Maximo, por lo que este nodo es hoja
                     {
                         Quitar(Raiz, k);
                     }
@@ -450,9 +430,9 @@ namespace Estructuras
                 {
                     EliminarRegistro(Clave, Raiz.Hijo[k], ref Encontrado);
                     //se comprueba que el nodo hijo mantenga un numero de claves igual o mayor que el minimo necesario
-                    if (Raiz.Hijo[k]!=null)//condicion de que no sea hoja
+                    if (Raiz.Hijo[k] != null)//condicion de que no sea hoja
                     {
-                        if (Raiz.Hijo[k].Cuenta<Minimo)
+                        if (Raiz.Hijo[k].Cuenta < Minimo)
                         {
                             Restablecer(Raiz, k);
                         }
@@ -474,7 +454,7 @@ namespace Estructuras
             {
                 return;
             }
-            else if (Raiz.Cuenta==0)
+            else if (Raiz.Cuenta == 0)
             {
                 P = Raiz;
                 Raiz = Raiz.Hijo[0];
@@ -489,13 +469,11 @@ namespace Estructuras
         }
 
         #endregion
-       
+        //hacer metodo
         #region Escritura de archivo
 
 
 
         #endregion
-
-        
     }
 }
