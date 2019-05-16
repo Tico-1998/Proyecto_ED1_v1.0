@@ -12,6 +12,7 @@ namespace Proyecto_ED1_v1.Models
     //public delegate int compareTo<T>(T Tabla, T Valor);
     public class Tabla
     {
+        public static List<Tabla> ResultadoVistas = new List<Tabla>();
         public static Excel.Application ArchivoExcel = new Excel.Application();
         public static List<Tabla> Solicitado = new List<Tabla>();
         public static Dictionary<string, int> diccionarioNumeroTabla = new Dictionary<string, int>();
@@ -86,6 +87,11 @@ namespace Proyecto_ED1_v1.Models
             posicionTabla.Add(nombre, cantidadTablas);
             cantidadTablas++;
             Arbol.Orden = 5;
+            ResultadoVistas.Clear();
+            for (int i = 0; i < Tabla.Count(); i++)
+            {
+                ResultadoVistas.Add(Tabla[i]);
+            }            
             //creacion txt
             string nombre_archivo = "Tabla"+numeroTabla+".txt";
             string pathfinal = nombre_archivo;
@@ -122,7 +128,7 @@ namespace Proyecto_ED1_v1.Models
             libro.SaveAs("Excel" + numeroTabla);
             numeroTabla++;
         }
-        //eliminar archivo preguntar
+        //eliminar tabla de la vista
         public static void ElimiarTabla(string Clave)
         {
             DiccionarioTabla.Remove(Clave);
@@ -322,6 +328,11 @@ namespace Proyecto_ED1_v1.Models
             Arboles.Remove(Llave);
             Raiz = Eliminar.Raiz;
             Eliminar.Eliminar(tabla, Raiz);
+            ResultadoVistas.Clear();
+            for (int i = 0; i < eliminando.Count(); i++)
+            {
+                ResultadoVistas.Add(eliminando[i]);
+            }
             Arboles.Add(Llave, Eliminar);
             int posicion = posicionTabla[Llave];
             arraytablas[posicion] = eliminando;
@@ -583,6 +594,12 @@ namespace Proyecto_ED1_v1.Models
                 {
                     Solicitado.Add(tabla);
                 }
+                ResultadoVistas.Clear();
+                for (int i = 0; i < Solicitado.Count(); i++)
+                {
+                    ResultadoVistas.Add(Solicitado[i]);
+                }
+                        
                 //mostrar valores de la lista solicitado
             }
             else
@@ -681,6 +698,11 @@ namespace Proyecto_ED1_v1.Models
                         tabla_solicitada.Add(i, pedido);
                     }
                 }
+                Resultado.Clear();
+                for (int i = 0; i < tabla_solicitada.Count(); i++)
+                {
+                    ResultadoVistas.Add(tabla_solicitada[i]);
+                }
                //mostrar solicitado 
             }
         }
@@ -742,6 +764,11 @@ namespace Proyecto_ED1_v1.Models
             arbolInsertar = Arboles[nombreTabla];
             Arboles.Remove(nombreTabla);
             arbolInsertar.Insertar(tabla);
+            ResultadoVistas.Clear();
+            for (int i = 0; i < listaAgregar.Count(); i++)
+            {
+                ResultadoVistas.Add(listaAgregar[i]);
+            }
             Arboles.Add(nombreTabla, arbolInsertar);
             int posicion = posicionTabla[nombreTabla];
             arraytablas[posicion] = listaAgregar;

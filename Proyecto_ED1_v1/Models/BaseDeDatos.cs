@@ -28,22 +28,18 @@ namespace Proyecto_ED1_v1.Models
 
     public class Columnas
     {
-        public Tabla tabla = new Tabla();
+        public string tabla  { get; set; }        
+        public string Id { get; set; }        
+        public string Int1 { get; set; }        
+        public string Int2 { get; set; }
+        public string Int3 { get; set; }
+        public string Varchar1 { get; set; }
+        public string Varchar2 { get; set; }
+        public string Varchar3 { get; set; }
+        public string DateTime1 { get; set; }
+        public string DateTime2 { get; set; }
+        public string DateTime3 { get; set; }
         
-        public Tabla Columna { get; set; }
-        
-        public string Tipo { get; set; }
-        /*
-        public string Tipo2 { get; set; }
-        public string Tipo3 { get; set; }
-        public string Tipo4 { get; set; }
-        public string Tipo5 { get; set; }
-        public string Tipo6 { get; set; }
-        public string Tipo7 { get; set; }
-        public string Tipo8 { get; set; }
-        public string Tipo9 { get; set; }
-        public string Tipo10 { get; set; }
-        */
     }
 
     public class ResultadoGrid
