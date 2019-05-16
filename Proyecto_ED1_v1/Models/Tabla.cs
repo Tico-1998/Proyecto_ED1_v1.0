@@ -41,8 +41,8 @@ namespace Proyecto_ED1_v1.Models
 
         public static void CrearTabla(Tabla tabla, string nombre)
         {
-
-
+            
+            Variables.Clear();
             if (tabla.int1 != null) { Variables.Add(tabla.int1, "int1"); }
             if (tabla.int2 != null) { Variables.Add(tabla.int2, "int2"); }
             if (tabla.int3 != null) { Variables.Add(tabla.int3, "int3"); }
@@ -53,6 +53,7 @@ namespace Proyecto_ED1_v1.Models
             if (tabla.dateTime1 != null) { Variables.Add(tabla.dateTime1, "dateTime1"); }
             if (tabla.dateTime2 != null) { Variables.Add(tabla.dateTime2, "dateTime2"); }
             if (tabla.dateTime3 != null) { Variables.Add(tabla.dateTime3, "dateTime3"); }
+            
             tabla.nombre = nombre;
             DiccionarioVariables.Add(nombre, Variables);
             List<Tabla> Tabla = new List<Tabla>();
@@ -763,7 +764,7 @@ namespace Proyecto_ED1_v1.Models
             DiccionarioTabla.Add(nombreTabla, listaAgregar);
             arbolInsertar = Arboles[nombreTabla];
             Arboles.Remove(nombreTabla);
-            arbolInsertar.Insertar(tabla);
+            arbolInsertar.Insertar(tabla, nombreTabla);
             ResultadoVistas.Clear();
             for (int i = 0; i < listaAgregar.Count(); i++)
             {

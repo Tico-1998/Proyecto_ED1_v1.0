@@ -1,2 +1,1 @@
 Carro, Id, Cantidad, , , Nombre, , , , , 
-, 2, 1, , , Hyundai, , , , , 

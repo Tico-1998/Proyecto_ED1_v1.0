@@ -88,7 +88,7 @@ namespace Proyecto_ED1_v1.Controllers
                 string[] separador;
                 separador = lectura[contador].Split(' ');
                 int contadorID = 0;
-                if (separador[0]=="ID"&&contadorID<1||separador[0]=="Id"&&contadorID<1||separador[0]=="id"&&contadorID<1)
+                if (separador[0]=="ID"&&contadorID<1||separador[0]=="Id"&&contadorID<1||separador[0]=="id"&&contadorID<1|| separador[0] == "iD" && contadorID < 1)
                 {
                     tabla.id = separador[0];
                     contadorID++;

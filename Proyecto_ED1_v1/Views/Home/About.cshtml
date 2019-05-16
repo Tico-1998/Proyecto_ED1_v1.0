@@ -1,7 +1,28 @@
-﻿@{
-    ViewData["Title"] = "About";
-}
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
-
-<p>Use this area to provide additional information.</p>
+﻿@using Proyecto_ED1_v1.Controllers
+<div class="row">
+    <form action="/Home/Index" method="post">
+        <div class="col-md-3 form-horizontal">
+            <br />
+            <input type="text" class="form-control" name="Select" placeholder="Select" required>
+            <br />
+            <input type="text" class="form-control" name="From" placeholder="From" required>
+            <br />
+            <input type="text" class="form-control" name="Delete" placeholder="Delete" required>
+            <br />
+            <input type="text" class="form-control" name="Where" placeholder="Where" required>
+            <br />
+            <input type="text" class="form-control" name="Create Table" placeholder="Create Table" required>
+            <br />
+            <input type="text" class="form-control" name="Drop Table" placeholder="Drop Table" required>
+            <br />
+            <input type="text" class="form-control" name="Insert Into" placeholder="Insert Into" required>
+            <br />
+            <input type="text" class="form-control" name="Values" placeholder="Values" required>
+            <br />
+            <input type="text" class="form-control" name="Go" placeholder="Go" required>
+            <button class="btn btn-primary" type="submit">
+                Send
+            </button>
+        </div>
+    </form>
+</div>

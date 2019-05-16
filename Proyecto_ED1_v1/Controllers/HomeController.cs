@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Proyecto_ED1_v1.Models;
 using Proyecto_ED1_v1.Controllers;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Proyecto_ED1_v1.Controllers
 {
@@ -53,6 +55,8 @@ namespace Proyecto_ED1_v1.Controllers
         [HttpPost]
         public ActionResult Index(string[] textAreaSQL)
         {
+          
+                    
             LecturaDatosController.Leer(textAreaSQL);
             
             List<BaseDatos> pBDS = new List<BaseDatos>();
@@ -63,17 +67,39 @@ namespace Proyecto_ED1_v1.Controllers
             pBDS.Add(new BaseDatos { Nombre = "Base4", Tables = new List<Tablas>() });
             pBDS.Add(new BaseDatos { Nombre = "Base5", Tables = new List<Tablas>() });
 
-
+            
+                    
             List<Tablas> tablasBD1 = new List<Tablas>();
-            tablasBD1.Add(new Tablas { table = Tabla.nombretablas[0], columnas = new List<Columnas>() });
-
+            
+            string NombreTabla = Tabla.nombretablas[0];
             List<Columnas> ColumnasTabla1 = new List<Columnas>();
-            for (int i = 0; i < Tabla.ResultadoVistas.Count(); i++)
+            Tabla tabla = new Tabla();
+            List<Tabla> elementoTabla = new List<Tabla>();
+            if (Tabla.DiccionarioTabla[NombreTabla]!=null)
             {
-                ColumnasTabla1.Add(new Columnas { tabla = Tabla.ResultadoVistas[i].nombre, Id = Tabla.ResultadoVistas[i].id, Int1 = Tabla.ResultadoVistas[i].int1, Int2 = Tabla.ResultadoVistas[i].int2,
-                    Int3 = Tabla.ResultadoVistas[i].int3, Varchar1 = Tabla.ResultadoVistas[i].varchar1, Varchar2 = Tabla.ResultadoVistas[i].varchar2, Varchar3 = Tabla.ResultadoVistas[i].varchar3,
-                    DateTime1 = Tabla.ResultadoVistas[i].dateTime1, DateTime2 = Tabla.ResultadoVistas[i].dateTime2, DateTime3 = Tabla.ResultadoVistas[i].dateTime3 });
+                tablasBD1.Add(new Tablas { table = Tabla.nombretablas[0], columnas = new List<Columnas>() });
+                for (int i = 0; i < Tabla.ResultadoVistas.Count(); i++)
+                {
+                    elementoTabla = Tabla.DiccionarioTabla[NombreTabla];
+                    tabla = elementoTabla[i];
+                    ColumnasTabla1.Add(new Columnas
+                    {
+                        tabla = tabla.nombre,
+                        Id = tabla.id,
+                        Int1 = tabla.int1,
+                        Int2 = tabla.int2,
+                        Int3 = tabla.int3,
+                        Varchar1 = tabla.varchar1,
+                        Varchar2 = tabla.varchar2,
+                        Varchar3 = tabla.varchar3,
+                        DateTime1 = tabla.dateTime1,
+                        DateTime2 = tabla.dateTime2,
+                        DateTime3 = tabla.dateTime3
+                    });
+                }
             }
+            
+           
 
             //ColumnasTabla1.Add(new Columnas { Columna = tab, Tipo = Tabla.nombretablas[0] });
 
@@ -81,7 +107,149 @@ namespace Proyecto_ED1_v1.Controllers
 
             pBDS[0].Tables = tablasBD1;
 
+            List<Tablas> tablasBD2 = new List<Tablas>();
+            if (Tabla.nombretablas[1]!=null)
+            {
+                NombreTabla = Tabla.nombretablas[1];
+                List<Columnas> ColumnasTabla2 = new List<Columnas>();
+                if (Tabla.DiccionarioTabla[NombreTabla] != null)
+                {
+                    tablasBD2.Add(new Tablas { table = Tabla.nombretablas[1], columnas = new List<Columnas>() });
+                    for (int i = 0; i < Tabla.ResultadoVistas.Count(); i++)
+                    {
+                        elementoTabla = Tabla.DiccionarioTabla[NombreTabla];
+                        tabla = elementoTabla[i];
+                        ColumnasTabla2.Add(new Columnas
+                        {
+                            tabla = tabla.nombre,
+                            Id = tabla.id,
+                            Int1 = tabla.int1,
+                            Int2 = tabla.int2,
+                            Int3 = tabla.int3,
+                            Varchar1 = tabla.varchar1,
+                            Varchar2 = tabla.varchar2,
+                            Varchar3 = tabla.varchar3,
+                            DateTime1 = tabla.dateTime1,
+                            DateTime2 = tabla.dateTime2,
+                            DateTime3 = tabla.dateTime3
+                        });
+                    }
+                }
+                tablasBD2[0].columnas = ColumnasTabla2;
+
+                pBDS[1].Tables = tablasBD2;
+            }
+
             
+
+            List<Tablas> tablasBD3 = new List<Tablas>();
+
+            if (Tabla.nombretablas[2]!=null)
+            {
+                NombreTabla = Tabla.nombretablas[2];
+                List<Columnas> ColumnasTabla3 = new List<Columnas>();
+                if (Tabla.DiccionarioTabla[NombreTabla] != null)
+                {
+                    tablasBD3.Add(new Tablas { table = Tabla.nombretablas[2], columnas = new List<Columnas>() });
+                    for (int i = 0; i < Tabla.ResultadoVistas.Count(); i++)
+                    {
+                        elementoTabla = Tabla.DiccionarioTabla[NombreTabla];
+                        tabla = elementoTabla[i];
+                        ColumnasTabla3.Add(new Columnas
+                        {
+                            tabla = tabla.nombre,
+                            Id = tabla.id,
+                            Int1 = tabla.int1,
+                            Int2 = tabla.int2,
+                            Int3 = tabla.int3,
+                            Varchar1 = tabla.varchar1,
+                            Varchar2 = tabla.varchar2,
+                            Varchar3 = tabla.varchar3,
+                            DateTime1 = tabla.dateTime1,
+                            DateTime2 = tabla.dateTime2,
+                            DateTime3 = tabla.dateTime3
+                        });
+                    }
+                }
+                tablasBD3[0].columnas = ColumnasTabla3;
+
+                pBDS[2].Tables = tablasBD3;
+            }
+            
+
+            List<Tablas> tablasBD4 = new List<Tablas>();
+
+            if (Tabla.nombretablas[3]!=null)
+            {
+                NombreTabla = Tabla.nombretablas[3];
+                List<Columnas> ColumnasTabla4 = new List<Columnas>();
+                if (Tabla.DiccionarioTabla[NombreTabla] != null)
+                {
+                    tablasBD4.Add(new Tablas { table = Tabla.nombretablas[3], columnas = new List<Columnas>() });
+                    for (int i = 0; i < Tabla.ResultadoVistas.Count(); i++)
+                    {
+                        elementoTabla = Tabla.DiccionarioTabla[NombreTabla];
+                        tabla = elementoTabla[i];
+                        ColumnasTabla4.Add(new Columnas
+                        {
+                            tabla = tabla.nombre,
+                            Id = tabla.id,
+                            Int1 = tabla.int1,
+                            Int2 = tabla.int2,
+                            Int3 = tabla.int3,
+                            Varchar1 = tabla.varchar1,
+                            Varchar2 = tabla.varchar2,
+                            Varchar3 = tabla.varchar3,
+                            DateTime1 = tabla.dateTime1,
+                            DateTime2 = tabla.dateTime2,
+                            DateTime3 = tabla.dateTime3
+                        });
+                    }
+                }
+                tablasBD4[0].columnas = ColumnasTabla4;
+
+                pBDS[3].Tables = tablasBD4;
+            }
+                    
+
+            
+
+            List<Tablas> tablasBD5 = new List<Tablas>();
+
+            if (Tabla.nombretablas[4]!=null)
+            {
+                NombreTabla = Tabla.nombretablas[4];
+                List<Columnas> ColumnasTabla5 = new List<Columnas>();
+                if (Tabla.DiccionarioTabla[NombreTabla] != null)
+                {
+                    tablasBD5.Add(new Tablas { table = Tabla.nombretablas[4], columnas = new List<Columnas>() });
+                    for (int i = 0; i < Tabla.ResultadoVistas.Count(); i++)
+                    {
+                        elementoTabla = Tabla.DiccionarioTabla[NombreTabla];
+                        tabla = elementoTabla[i];
+                        ColumnasTabla5.Add(new Columnas
+                        {
+                            tabla = tabla.nombre,
+                            Id = tabla.id,
+                            Int1 = tabla.int1,
+                            Int2 = tabla.int2,
+                            Int3 = tabla.int3,
+                            Varchar1 = tabla.varchar1,
+                            Varchar2 = tabla.varchar2,
+                            Varchar3 = tabla.varchar3,
+                            DateTime1 = tabla.dateTime1,
+                            DateTime2 = tabla.dateTime2,
+                            DateTime3 = tabla.dateTime3
+                        });
+                    }
+                }
+                tablasBD5[0].columnas = ColumnasTabla5;
+
+                pBDS[4].Tables = tablasBD5;
+            }               
+
+            
+
             List<ResultadoGrid> lstResultado = new List<ResultadoGrid>();
 
             List<ColumnasResult> Columnas = new List<ColumnasResult>();
@@ -325,6 +493,41 @@ namespace Proyecto_ED1_v1.Controllers
 
 
             return View(md);
+        }
+
+        [HttpGet]
+        public ActionResult About()
+        {
+            return View("About");
+        }
+
+
+        [HttpPost]
+        public ActionResult About(FormCollection formCollection)
+        {
+            Sintaxis.Select = formCollection["Select"];
+            Sintaxis.From = formCollection["From"];
+            Sintaxis.Delete = formCollection["Delete"];
+            Sintaxis.Where = formCollection["Where"];
+            Sintaxis.CreateTable = formCollection["Create Table"];
+            Sintaxis.DropTable = formCollection["Drop Table"];
+            Sintaxis.InsertInto = formCollection["Insert Into"];
+            Sintaxis.Values = formCollection["Values"];
+            Sintaxis.Go = formCollection["Go"];
+            using (StreamWriter outputFile = new StreamWriter("Palabra_Reservadas"))
+            {
+                outputFile.WriteLine("SELECT="+Sintaxis.Select);
+                outputFile.WriteLine("FROM=" + Sintaxis.From);
+                outputFile.WriteLine("DELETE=" + Sintaxis.Delete);
+                outputFile.WriteLine("WHERE=" + Sintaxis.Where);
+                outputFile.WriteLine("CREATE TABLE=" + Sintaxis.CreateTable);
+                outputFile.WriteLine("DROP TABLE=" + Sintaxis.DropTable);
+                outputFile.WriteLine("INSERT INTO=" + Sintaxis.InsertInto);
+                outputFile.WriteLine("VALUES=" + Sintaxis.Values);
+                outputFile.WriteLine("GO=" + Sintaxis.Go);
+            }
+
+                return View("About");
         }
 
         //public ActionResult Resultados(String textAreaSQL)
