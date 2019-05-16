@@ -78,25 +78,34 @@
                                                 <div style="display:none">
                                                     <table cellpadding="0" cellspacing="0" class="ChildGrid">
                                                         <tr>
-                                                            <th>Columnas</th>
-                                                            <th>Tipo</th>
+                                                            <th>Tabla</th>
+                                                            <th>Id</th>
+                                                            <th>Int1</th>
+                                                            <th>Int2</th>
+                                                            <th>Int3</th>
+                                                            <th>Varchar1</th>
+                                                            <th>Varchar2</th>
+                                                            <th>Varchar3</th>
+                                                            <th>DateTime1</th>
+                                                            <th>DateTime2</th>
+                                                            <th>DateTime3</th>
+
                                                         </tr>
                                                         @foreach (Columnas col in tb.columnas)
                                                         {
                                                         <tr>
-                                                            <td>@col.Columna</td>
-                                                            <td>@col.Tipo</td>
-                                                            @*
-                                                            <td>@col.Tipo2</td>
-                                                            <td>@col.Tipo3</td>
-                                                            <td>@col.Tipo4</td>
-                                                            <td>@col.Tipo5</td>
-                                                            <td>@col.Tipo6</td>
-                                                            <td>@col.Tipo7</td>
-                                                            <td>@col.Tipo8</td>
-                                                            <td>@col.Tipo9</td>
-                                                            <td>@col.Tipo10</td>
-                                                                *@
+                                                            <td>@col.tabla</td>
+                                                            <td>@col.Id</td>                                                            
+                                                            <td>@col.Int1</td>
+                                                            <td>@col.Int2</td>
+                                                            <td>@col.Int3</td>
+                                                            <td>@col.Varchar1</td>
+                                                            <td>@col.Varchar2</td>
+                                                            <td>@col.Varchar3</td>
+                                                            <td>@col.DateTime1</td>
+                                                            <td>@col.DateTime2</td>
+                                                            <td>@col.DateTime3</td>
+                                                                
                                                         </tr>
                                                         }
                                                     </table>
