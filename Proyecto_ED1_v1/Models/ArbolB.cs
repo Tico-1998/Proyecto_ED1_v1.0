@@ -230,13 +230,13 @@ namespace Proyecto_ED1_v1.Models
         /// </summary>
         /// <param name="Clave"></param> valor a insertar
         /// parametro "raiz" raiz del arbol 
-        public void Insertar(T Clave)
+        public void Insertar(T Clave,string nombre)
         {
             var nuevaraiz = this.Raiz;
             Insertar(Clave, ref nuevaraiz);
             this.Raiz = nuevaraiz;
             Datos.Value.Add(Clave);
-            Archivo(Datos);
+            Archivo(Datos, nombre);
             //Inorder(Raiz);
         }//Fin metodo Insertar   
 
@@ -245,47 +245,63 @@ namespace Proyecto_ED1_v1.Models
 
         #region Recorrido
         //Recorrido
-        public  void Inorder(ArbolBNodo<T> Recorrido)
+        public  void Inorder(ArbolBNodo<T> Recorrido, string nombre)
         {
+
             if (!arbolVacio(Recorrido))
             {
                 if (Recorrido.Hijo[0]!=null)
                 {
-                    Inorder(Recorrido.Hijo[0]);
+                    Inorder(Recorrido.Hijo[0],nombre);
                 }
                 for (int i = 1; i <= Recorrido.Cuenta; i++)
                 {
                     if (Recorrido.Valores[i]!=null)
-                    {
+                    {                        
                         Lista.Value.Add(Recorrido.Valores[i]);
                         if (Recorrido.Hijo[i] != null)
                         {
-                            Inorder(Recorrido.Hijo[i]);
+                            Inorder(Recorrido.Hijo[i],nombre);
                         }
                     }                 
                 }
             }
         }//fin metodo Inorder
-        public List<T> ToList()
+        public List<T> ToList(string nombre)
         {
             Lista = new Lazy<List<T>>();
-            Inorder(Raiz);
-            Archivo(Lista);
+            Inorder(Raiz,nombre);
+            Archivo(Lista, nombre);
             return Lista.Value;
         }
         //Fin recorrido
         #endregion
     
         #region archivo
-        public  void Archivo(Lazy<List<T>> Lista)
+        public  void Archivo(Lazy<List<T>> Lista, string nombre)
         {
-            string nombre = System.IO.Path.GetRandomFileName();
-            string pathfinal = nombre;
+            Tabla tabla = new Tabla();
+            List<T> listaTablas = new List<T>();
+            listaTablas = Lista.Value;
+            bool valor;
+            string pathfinal = "Arbol_Archivo.ArbolB";
             using (StreamWriter outputFile = new StreamWriter(pathfinal))
             {
-                for (int i = 0; i < Lista.Value.Count(); i++)
-                {                   
-                    outputFile.WriteLine(Convert.ToString(Lista.Value[i].GetHashCode()));
+                for (int i = 0; i < listaTablas.Count(); i++)
+                {
+                    for (int j = 0; j < Tabla.DiccionarioTabla[nombre].Count();j++)
+                    {
+                        valor = listaTablas[i].Equals(Tabla.DiccionarioTabla[nombre][j]);
+                        tabla = Tabla.DiccionarioTabla[nombre][j];
+                        outputFile.WriteLine(tabla.nombre+" | "+tabla.id+" | "+tabla.int1+" | "+tabla.int2+" | "
+                            +tabla.int3+" | "+tabla.varchar1+" | "+tabla.varchar2+" | "+tabla.varchar3+" | "+
+                            tabla.dateTime1+" | "+tabla.dateTime2+" | "+tabla.dateTime3);
+                        
+                    }
+                    
+                    //datos = tabla;
+                    
+                    
                     /*for (int l = 0; l < 5; l++)
                     {
                         outputFile.WriteLine(Raiz);
